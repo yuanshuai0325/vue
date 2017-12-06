@@ -6,6 +6,7 @@
 			:before-upload="beforeUpload"
 			:on-success="uploadSuccess"
 			:on-remove="fileRemove"
+			:file-list="fileList"
 			action="http://localhost:8080/api/backstage/postfile/"
 			multiple>
 			<i class="el-icon-upload"></i>
@@ -23,9 +24,9 @@
 				</el-table-column>
 				<el-table-column label="操作">
 					<template slot-scope="scope">
-						<el-button size="mini" type="primary">备份</el-button>
-						<el-button size="mini" type="warning">更新</el-button>
-						<el-button size="mini" type="danger">删除</el-button>
+						<el-button size="mini" type="primary" v-show="bflag">备份</el-button>
+						<el-button size="mini" type="warning" v-show="bflag">更新</el-button>
+						<el-button size="mini" type="danger" v-show="bflag" @click="handleDel(scope.$index, scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -38,9 +39,11 @@
 	export default {
 		data(){
 			return {
+				fileList: [],
 				message:'',
 				type: '',
-				flag: 'true',
+				flag: true,
+				bflag: false,
 				filelist: [{'filename':''}],
 			}
 		},
@@ -53,9 +56,11 @@
 					message: file.name + '上传成功',
 					type: 'success',
 				});
+				this.fileList.push({name:file.name})
 				this.fileChange();
 			},
 			fileRemove: function(file) {
+				console.log(this.fileList)
 				// axios.get('/api/backstage/delfile', {params:{file:file.name}}).then(resp => {console.log(resp)}).catch(resp => {console.log(resp)})
 				// axios({
 				// 	method: 'get',
@@ -85,6 +90,7 @@
 						this.type = 'success';
 						this.open();
 						this.fileChange();
+						
 					} else if (resp.data.exec === "false"){
 						this.message = file.name+'删除失败';
 						this.type = 'warning';
@@ -100,7 +106,15 @@
 				axios({
 					method: 'get',
 					url: '/api/backstage/listfile',
-				}).then(resp => {this.filelist = resp.data.filelist}).catch(err => {console.log(err)})
+				}).then(resp => {
+					if (resp.data.filelist.length > 0) {
+						this.filelist = resp.data.filelist;
+						this.bflag = true
+					} else {
+						this.filelist = [{'filename':''}];
+						this.bflag = false
+					}
+				}).catch(err => {console.log(err)})
 			},
 			open() {
 				this.$message({
@@ -108,11 +122,16 @@
 					type: this.type,
 				})
 			},
+			handleDel(index, row) {
+				// console.log(index, row)
+				// console.log(row.filename)
+				this.fileRemove({'name': row.filename}, {'name': row.filename})
+			},
 		},
 		created() {
 			// console.log(1)
 			this.fileChange()
-		}
+		},
 	}
 </script>
 
