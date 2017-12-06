@@ -14,7 +14,9 @@
 			<div class="el-upload__tip" slot="tip">只能上传文件</div>
 		</el-upload>
 		<div id="mtable">
-			<el-table :data="filelist">
+			<el-table ref="multipleTable" tooltip-effect="dark" :data="filelist" @selection-change="handleSelectionChange">
+				<el-table-column type="selection">
+				</el-table-column>
 				<el-table-column label="已上传文件">
 					<template slot-scope="scope">
 						<div slot="reference" class="name-wrapper">
@@ -24,12 +26,17 @@
 				</el-table-column>
 				<el-table-column label="操作">
 					<template slot-scope="scope">
-						<el-button size="mini" type="primary" v-show="bflag">备份</el-button>
-						<el-button size="mini" type="warning" v-show="bflag">更新</el-button>
-						<el-button size="mini" type="danger" v-show="bflag" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+						<el-button size="mini" type="primary" v-show="bflag" :disabled="b2flag">备份</el-button>
+						<el-button size="mini" type="warning" v-show="bflag" :disabled="b2flag">更新</el-button>
+						<el-button size="mini" type="danger" v-show="bflag" @click="handleDel(scope.$index, scope.row)" :disabled="b2flag">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
+			<el-button-group v-show="bflag" id="mbutton">
+				<el-button>备份选中</el-button>
+				<el-button>更新选中</el-button>
+				<el-button @click="handleDelSelection">删除选中</el-button>
+			</el-button-group>
 		</div>
 	</div>
 </template>
@@ -44,11 +51,21 @@
 				type: '',
 				flag: true,
 				bflag: false,
-				filelist: [{'filename':''}],
+				b2flag: false,
+				b2flagcount: 0,
+				// filelist: [{'filename':''}],
+				filelist: [],
+				multipleSelection: [],
 			}
 		},
 		methods: {
 			beforeUpload(file){
+				this.b2flagcount += 1;
+				if (this.b2flagcount === 0) {
+					this.b2flag = false
+				} else {
+					this.b2flag = true
+				}
 				return this.flag
 			},			
 			uploadSuccess(resp, file){
@@ -56,11 +73,22 @@
 					message: file.name + '上传成功',
 					type: 'success',
 				});
-				this.fileList.push({name:file.name})
+				this.fileList[this.fileList.length] = {'name':file.name};
+				// this.fileList.push({'name':file.name}); push导致报错 原因未查明
+				// console.log(typeof this.fileList)
 				this.fileChange();
+				this.b2flagcount -= 1;
+				if (this.b2flagcount === 0) {
+					this.b2flag = false
+				} else {
+					this.b2flag = true
+				}
 			},
 			fileRemove: function(file) {
-				console.log(this.fileList)
+				if (this.b2flag === true) {
+					this.b2flag = false
+				}
+				// console.log(this.fileList);
 				// axios.get('/api/backstage/delfile', {params:{file:file.name}}).then(resp => {console.log(resp)}).catch(resp => {console.log(resp)})
 				// axios({
 				// 	method: 'get',
@@ -89,10 +117,15 @@
 						this.message = file.name+'已删除';
 						this.type = 'success';
 						this.open();
+						for (let i = 0; i < this.fileList.length; i++) {
+							if (this.fileList[i].name === file.name) {
+								this.fileList.splice(i,1)
+							}
+					};
 						this.fileChange();
 						
 					} else if (resp.data.exec === "false"){
-						this.message = file.name+'删除失败';
+						this.message = file.name+'删除失败,请确认是否已上传';
 						this.type = 'warning';
 						this.open();
 					}
@@ -111,7 +144,7 @@
 						this.filelist = resp.data.filelist;
 						this.bflag = true
 					} else {
-						this.filelist = [{'filename':''}];
+						this.filelist = [];
 						this.bflag = false
 					}
 				}).catch(err => {console.log(err)})
@@ -127,6 +160,15 @@
 				// console.log(row.filename)
 				this.fileRemove({'name': row.filename}, {'name': row.filename})
 			},
+			handleDelSelection() {
+				for (let i in this.multipleSelection) {
+					this.fileRemove({'name': this.multipleSelection[i].filename})
+				}
+			},
+			handleSelectionChange(val) {
+        		this.multipleSelection = val;
+      		},
+
 		},
 		created() {
 			// console.log(1)
@@ -154,5 +196,10 @@
 		right: 2%;
 		/*border: 1px solid red;*/
 		width: 60%;
+	}
+	#mbutton {
+		position: absolute;
+		right: 2%;
+		margin-top: 1%;
 	}
 </style>
