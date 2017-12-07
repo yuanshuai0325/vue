@@ -26,14 +26,14 @@
 				</el-table-column>
 				<el-table-column label="操作">
 					<template slot-scope="scope">
-						<el-button size="mini" type="primary" v-show="bflag" :disabled="b2flag">备份</el-button>
+						<el-button size="mini" type="primary" v-show="bflag" :disabled="b2flag" @click="handleBack(scope.$index, scope.row)">备份</el-button>
 						<el-button size="mini" type="warning" v-show="bflag" :disabled="b2flag">更新</el-button>
 						<el-button size="mini" type="danger" v-show="bflag" @click="handleDel(scope.$index, scope.row)" :disabled="b2flag">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
 			<el-button-group v-show="bflag" id="mbutton">
-				<el-button>备份选中</el-button>
+				<el-button @click="handleBackSelection">备份选中</el-button>
 				<el-button>更新选中</el-button>
 				<el-button @click="handleDelSelection">删除选中</el-button>
 			</el-button-group>
@@ -48,6 +48,7 @@
 			return {
 				fileList: [],
 				message:'',
+				title: '',
 				type: '',
 				flag: true,
 				bflag: false,
@@ -155,6 +156,14 @@
 					type: this.type,
 				})
 			},
+			open2() {
+				this.$notify({
+					title: this.title,
+					message: this.message,
+					duration: 0,
+					type: this.type,
+				})
+			},
 			handleDel(index, row) {
 				// console.log(index, row)
 				// console.log(row.filename)
@@ -168,6 +177,18 @@
 			handleSelectionChange(val) {
         		this.multipleSelection = val;
       		},
+      		handleBack(index, row) {
+      			// console.log(index, row)
+      			// this.title = "备份"
+      			// this.message = row.filename
+      			// this.type = "success"
+      			// this.open2()
+      			console.log(typeof [])
+      			axios.get('/api/backstage/backupfile', {params: {'filelist':[row.filename,1]}}).then(resp => {console.log(resp)}).catch(err => {console.log(err)})
+      		},
+      		handleBackSelection() {
+      			console.log(this.multipleSelection)
+      		}
 
 		},
 		created() {
