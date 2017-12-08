@@ -26,7 +26,7 @@
 				</el-table-column>
 				<el-table-column label="操作">
 					<template slot-scope="scope">
-						<el-button size="mini" type="primary" v-show="bflag" :disabled="b2flag" @click="handleBack(scope.$index, scope.row)">备份</el-button>
+						<el-button size="mini" type="primary" v-show="bflag" :disabled="b2flag" @click="handleBack([{'filename': scope.row.filename}])">备份</el-button>
 						<el-button size="mini" type="warning" v-show="bflag" :disabled="b2flag">更新</el-button>
 						<el-button size="mini" type="danger" v-show="bflag" @click="handleDel(scope.$index, scope.row)" :disabled="b2flag">删除</el-button>
 					</template>
@@ -177,17 +177,60 @@
 			handleSelectionChange(val) {
         		this.multipleSelection = val;
       		},
-      		handleBack(index, row) {
-      			// console.log(index, row)
-      			// this.title = "备份"
-      			// this.message = row.filename
-      			// this.type = "success"
-      			// this.open2()
-      			console.log(typeof [])
-      			axios.get('/api/backstage/backupfile', {params: {'filelist':[row.filename,1]}}).then(resp => {console.log(resp)}).catch(err => {console.log(err)})
+      		handleBack(row) {
+      			// console.log(row);
+      			axios({
+					method: 'post',
+					url: '/api/backstage/backupfile',
+					data: row,
+					transformRequest:[
+						function(data) {
+							let params = ''
+							for(let index in data) {
+								params += 'filename=' + data[index].filename + '&'
+							}
+							return params
+						}
+					]
+				}).then(resp=>{
+					let successlist = resp.data.successlist;
+					let faillist = resp.data.faillist;
+					for (let index in successlist) {
+						let now = new Date();
+						console.log(now.getTime())
+						let exitTime = now.getTime() + 1000
+						while (true) {
+							now = new Date();
+							if (now.getTime() > exitTime) {
+								break;
+							}
+						}
+						this.title = '备份成功！';
+						this.message = successlist[index];
+						this.type = 'success';
+						this.open2()
+					};
+					for (let index in faillist) {
+						this.title = '备份失败！';
+						this.message = '请检查'+faillist[index]+'是否合规';
+						this.type = 'error';
+						this.open2()
+					}
+				}).catch(err=>{console.log(err)})
+
+				// axios({
+				// 	method: 'get',
+				// 	url: '/api/backstage/backupfile',
+				// 	params: {
+				// 		'filename': row[0].filename,
+				// 		'filename': 'xx'
+				// 	}
+
+				// })
       		},
       		handleBackSelection() {
-      			console.log(this.multipleSelection)
+      			this.handleBack(this.multipleSelection)
+      			// console.log(this.multipleSelection)
       		}
 
 		},
