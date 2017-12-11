@@ -27,15 +27,15 @@
 				<el-table-column label="操作">
 					<template slot-scope="scope">
 						<el-button size="mini" type="primary" v-show="bflag" :disabled="b2flag" @click="handleBack([{'filename': scope.row.filename}])">备份</el-button>
-						<el-button size="mini" type="warning" v-show="bflag" :disabled="b2flag">更新</el-button>
+						<el-button size="mini" type="warning" v-show="bflag" :disabled="b2flag" @click="handleUpdate([{'filename': scope.row.filename}])">更新</el-button>
 						<el-button size="mini" type="danger" v-show="bflag" @click="handleDel(scope.$index, scope.row)" :disabled="b2flag">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
 			<el-button-group v-show="bflag" id="mbutton">
-				<el-button @click="handleBackSelection">备份选中</el-button>
-				<el-button>更新选中</el-button>
-				<el-button @click="handleDelSelection">删除选中</el-button>
+				<el-button @click="handleBackSelection" :disabled="b2flag">备份选中</el-button>
+				<el-button @click="handleUpdateSelection" :disabled="b2flag">更新选中</el-button>
+				<el-button @click="handleDelSelection" :disabled="b2flag">删除选中</el-button>
 			</el-button-group>
 		</div>
 	</div>
@@ -196,15 +196,15 @@
 					let successlist = resp.data.successlist;
 					let faillist = resp.data.faillist;
 					for (let index in successlist) {
-						let now = new Date();
-						console.log(now.getTime())
-						let exitTime = now.getTime() + 1000
-						while (true) {
-							now = new Date();
-							if (now.getTime() > exitTime) {
-								break;
-							}
-						}
+						// let now = new Date();
+						// console.log(now.getTime())
+						// let exitTime = now.getTime() + 1000
+						// while (true) {
+						// 	now = new Date();
+						// 	if (now.getTime() > exitTime) {
+						// 		break;
+						// 	}
+						// }
 						this.title = '备份成功！';
 						this.message = successlist[index];
 						this.type = 'success';
@@ -231,7 +231,13 @@
       		handleBackSelection() {
       			this.handleBack(this.multipleSelection)
       			// console.log(this.multipleSelection)
-      		}
+      		},
+      		handleUpdate(row) {
+      			console.log(row)
+      		},
+      		handleUpdateSelection() {
+      			this.handleUpdate(this.multipleSelection)
+      		},
 
 		},
 		created() {
