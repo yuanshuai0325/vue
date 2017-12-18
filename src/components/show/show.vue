@@ -39,11 +39,13 @@
 			</el-button-group>
 		</div>
 	</div>
+
 </template>
 
 <script>
 	import axios from 'axios'
 	export default {
+		props:['loading'],
 		data(){
 			return {
 				fileList: [],
@@ -233,7 +235,42 @@
       			// console.log(this.multipleSelection)
       		},
       		handleUpdate(row) {
-      			console.log(row)
+      			// console.log(this.loading)
+      			this.loading.pd = true;
+      			axios({
+					method: 'post',
+					url: '/api/backstage/updatefile',
+					data: row,
+					transformRequest:[
+						function(data) {
+							let params = ''
+							for(let index in data) {
+								params += 'filename=' + data[index].filename + '&'
+							}
+							return params
+						}
+					]
+				}).then(resp=>{
+					// console.log(resp.data.successdata)
+					// console.log(resp.data.faillist)
+					let pdata = '';
+					let data = resp.data.successdata;
+					for (let item1 in data) {
+						pdata += item1 + '<br>'
+						for (let item2 in data[item1]) {
+							for (let item3 in data[item1][item2])
+								pdata += item3 + ' : ' + data[item1][item2][item3]+ '<br>'
+						}
+					};
+					let fdata = resp.data.faillist;
+					for (let fitem in fdata) {
+							pdata += '<br>' + fdata[fitem] + '文件不符合要求<br>'
+					};
+					console.log(pdata)					
+	      			this.loading.pd = false;
+					this.$alert('<html>'+pdata+'</html>', {dangerouslyUseHTMLString: true, showClose: false})
+					
+				}).catch(err=>{console.log(err)})
       		},
       		handleUpdateSelection() {
       			this.handleUpdate(this.multipleSelection)
@@ -250,15 +287,18 @@
 <style scoped>
 	.mshow {
 		display: flex;
+	}
+	/*.mshow {
+		display: flex;
 		position: absolute;
 		left: 10.5%;
 		border:1px solid #ccc;
 		border-radius: 8px;
 		height: 80%;
 		width: 85%;
-	}
+	}*/
 	.upload-demo {
-		margin: 2% 1% 1% 2%;
+		margin: 8% 1% 1% 8%;
 		z-index: 666;
 	}
 	#mtable {

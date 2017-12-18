@@ -9,11 +9,12 @@ const routes = [
   {
     path: '/main',
     component: resolve => { require(['components/main'], resolve) },
-  //   name: 'main',
-  //   children: [
-  //     { path: 'view', component: resolve => { require(['components/view'], resolve) }, name: 'view' }
-  //   ]
+    name: 'main',
+    // children: [
+    //   { path: 'rollback', component: resolve => { require(['components/code/rollback'], resolve) }, name: 'rollbackcode' }
+    // ]
   },
+  
   { path: '/', redirect: 'login' },
   { path: '*', redirect: 'login' }
 ]
