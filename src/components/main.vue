@@ -27,16 +27,6 @@
 </script>
 
 <style>
-	.mcontainer {
-		height: 100%;
-	}
-	.mcontainerbox {
-		display: flex;
-		position: absolute;
-		left: 10.5%;
-		border:1px solid #ccc;
-		border-radius: 8px;
-		height: 80%;
-		width: 85%;
-	}
+	
+	
 </style>

@@ -14,7 +14,11 @@ const routes = [
     //   { path: 'rollback', component: resolve => { require(['components/code/rollback'], resolve) }, name: 'rollbackcode' }
     // ]
   },
-  
+  {
+    path: '/rollbackcode',
+    component: resolve => { require(['components/rollbackcode'], resolve) },
+    name: 'rollbackcode',
+  },
   { path: '/', redirect: 'login' },
   { path: '*', redirect: 'login' }
 ]

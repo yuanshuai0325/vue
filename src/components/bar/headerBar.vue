@@ -1,14 +1,14 @@
 <template>
   <div class="mheader">
-    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" :router="true">
+    <el-menu :router="true" :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
       <el-menu-item index="main">处理中心</el-menu-item>
-      <el-menu-item index="">代码回退</a></el-menu-item>
-      <el-submenu index="2">
+      <el-menu-item index="rollbackcode">代码回退</el-menu-item>
+      <!-- <el-submenu index="2">
         <template slot="title">我的工作台</template>
         <el-menu-item index="2-1">选项1</el-menu-item>
         <el-menu-item index="2-2">选项2</el-menu-item>
         <el-menu-item index="2-3">选项3</el-menu-item>
-      </el-submenu>
+      </el-submenu> -->
     </el-menu>
     <div class="line"></div>
     <!-- <el-menu
@@ -35,15 +35,16 @@
   export default {
     data() {
       return {
-        activeIndex: 'main',
-        activeIndex2: '1'
+        activeIndex: '',
       };
     },
     methods: {
       handleSelect(key, keyPath) {
-        this.activeIndex=key;
-        console.log(key, keyPath);
+        console.log(key, keyPath)
       }
+    },
+    mounted(){
+      this.activeIndex = this.$router.history.current.name
     }
   }
 </script>

@@ -11,8 +11,9 @@ export default {
 </script>
 
 <style>
+	@import './assets/css/reset.css'
 	#app {
 		height: 100%;
 	}
-	@import './assets/css/reset.css'
+	@import './assets/css/general.css'
 </style>

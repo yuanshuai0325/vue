@@ -53,6 +53,7 @@ module.exports = {
       'components': path.resolve(__dirname, './src/components'),
       'bar': path.resolve(__dirname, './src/components/bar'),
       'show': path.resolve(__dirname, './src/components/show'),
+      'code': path.resolve(__dirname, './src/components/code'),
       '@': resolve('src'),
     },
     extensions: ['*', '.js', '.vue', '.json']
