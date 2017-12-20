@@ -3,7 +3,7 @@
 		<header-bar></header-bar>
 		<side-bar></side-bar>
 		<div class="mcontainerbox">
-			<code-back :loading="loading"></code-back>
+			<run-cmd :loading="loading"></run-cmd>
 		</div>
 	</div>
 </template>
@@ -11,9 +11,9 @@
 <script>
 	import sideBar from 'bar/sideBar.vue'
 	import headerBar from 'bar/headerBar.vue'
-	import codeBack from 'codeback/codeBack.vue'
+	import runCmd from 'runcmd/runCmd.vue'
 	export default {
-		data() {
+		data(){
 			return {
 				loading: {'pd': false},
 			}
@@ -21,7 +21,7 @@
 		components: {
 			headerBar,
 			sideBar,
-			codeBack,
+			runCmd,
 		}
 	}
 </script>

@@ -19,6 +19,11 @@ const routes = [
     component: resolve => { require(['components/rollbackcode'], resolve) },
     name: 'rollbackcode',
   },
+  {
+    path: '/cmdrun',
+    component: resolve => { require(['components/cmdrun'], resolve) },
+    name: 'cmdrun',
+  },
   { path: '/', redirect: 'login' },
   { path: '*', redirect: 'login' }
 ]
