@@ -4,30 +4,52 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const routes = [
-  { path: '/login', component: resolve => { require(['components/login'], resolve) }, name: 'login' },
+// 无需权限可访问页面
+const constantRouterMap = [
   {
-    path: '/main',
-    component: resolve => { require(['components/main'], resolve) },
-    name: 'main',
-    // children: [
-    //   { path: 'rollback', component: resolve => { require(['components/code/rollback'], resolve) }, name: 'rollbackcode' }
-    // ]
+    path: '/login',
+    component: resolve => { require(['components/login'], resolve) },
+    name: 'login'
+  },
+  {
+    path: '/dashboard',
+    component: resolve => {require(['components/dashboard'], resolve)},
+    name: 'dashboard'
+  },
+  {
+    path: '/',
+    redirect: 'login'
+  },
+]
+
+// 实例化只挂载不需要权限的页面
+export default new Router({
+  routes: constantRouterMap
+})
+
+// 异步挂载路由
+// 需要根据权限加载路由表
+export const asyncRouterMap = [
+  
+  {
+    path: '/updatecode',
+    component: resolve => { require(['components/updatecode'], resolve) },
+    name: 'updatecode',
+    meta: { role: ['administrator'] },
   },
   {
     path: '/rollbackcode',
     component: resolve => { require(['components/rollbackcode'], resolve) },
     name: 'rollbackcode',
+    meta: { role: ['administrator'] },
   },
   {
     path: '/cmdrun',
     component: resolve => { require(['components/cmdrun'], resolve) },
     name: 'cmdrun',
+    meta: { role: ['administrator'] },
   },
-  { path: '/', redirect: 'login' },
-  { path: '*', redirect: 'login' }
+  { path: '*', redirect: '/404' },
 ]
 
-export default new Router({
-  routes
-})
+

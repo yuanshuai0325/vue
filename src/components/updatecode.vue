@@ -3,7 +3,7 @@
 		<header-bar></header-bar>
 		<side-bar></side-bar>
 		<div class="mcontainerbox">
-			<show :loading="loading"></show>
+			<code-update :loading="loading"></code-update>
 		</div>
 	</div>
 </template>
@@ -11,7 +11,7 @@
 <script>
 	import sideBar from 'bar/sideBar.vue'
 	import headerBar from 'bar/headerBar.vue'
-	import show from 'show/show.vue'
+	import codeUpdate from 'codeupdate/codeUpdate.vue'
 	export default {
 		data(){
 			return {
