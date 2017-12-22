@@ -21,5 +21,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 
 ## vuex 使用时间 2017 12 21 日
 
-### http://blog.csdn.net/harsima/article/details/77949448
-### https://pagespeed.v2ex.com/t/362914
+
+### 拦截器 https://www.cnblogs.com/JiangM8/p/7278406.html
+### django token http://getblimp.github.io/django-rest-framework-jwt/
+

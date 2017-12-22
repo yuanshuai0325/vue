@@ -44,11 +44,17 @@
 						}
 					},
 					methods:{
+						setCookie(name,expiredate) {
+							let now = new Date();
+							document.cookie = name +"=" +expiredate
+						},
 						change(){
 							// this.username='alice';
 							// this.name='alice';
 							// this.$emit('update:name','alice'); //方式2：a.使用.sync，需要显式地触发一个更新事件
 							this.user.age=18;
+							this.setCookie('tom','1000')
+							console.log(document.cookie)
 						}
 					}
 				}

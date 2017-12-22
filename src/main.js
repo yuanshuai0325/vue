@@ -20,25 +20,25 @@ Vue.use(ElementUI)
 // to: Route:即将进入目标 路由对象
 // from： Route：当前导航要离开的路由
 // next： Function
-router.beforeEach((to, from, next)) => {
-	console.log(to)
-	if (store.getters.token) {
-		if (to.path === '/') {
-			next({path:'dashboard'});
-		} else {
-			if (store.getters.roles.length === 0) {
-				store.dispatch('GenerateRoutes', {roles}).then(() => {
-					router.addRoutes(store.getters.addRouters);
-					next(to);
-				}).catch(err => {console.log(err)})
-			} else {
-				next()
-			}
-		}
-	} else {
-		next('login')
-	}
-}
+// router.beforeEach((to, from, next)) => {
+// 	console.log(to)
+// 	if (store.getters.token) {
+// 		if (to.path === '/') {
+// 			next({path:'dashboard'});
+// 		} else {
+// 			if (store.getters.roles.length === 0) {
+// 				store.dispatch('GenerateRoutes', {roles}).then(() => {
+// 					router.addRoutes(store.getters.addRouters);
+// 					next(to);
+// 				}).catch(err => {console.log(err)})
+// 			} else {
+// 				next()
+// 			}
+// 		}
+// 	} else {
+// 		next('login')
+// 	}
+// }
 new Vue({
 	router,
 	store,
