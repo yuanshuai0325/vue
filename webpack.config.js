@@ -52,7 +52,7 @@ module.exports = {
       'vue$': 'vue/dist/vue.esm.js',
       'components': path.resolve(__dirname, './src/components'),
       'bar': path.resolve(__dirname, './src/components/bar'),
-      'show': path.resolve(__dirname, './src/components/show'),
+      'codeupdate': path.resolve(__dirname, './src/components/codeupdate'),
       'codeback': path.resolve(__dirname, './src/components/codeback'),
       'runcmd': path.resolve(__dirname, './src/components/runcmd'),
       '@': resolve('src'),

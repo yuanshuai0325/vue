@@ -10,11 +10,16 @@ import VueResource from 'vue-resource'
 // 引入动画效果
 import animate from 'animate.css'
 // 引入vuex状态管理
-import store from './store/index.js'
+// import store from './store/index.js'
+
+// 引入vue-cookie 用于cookie保存
+import VueCookie from 'vue-cookie'
 
 Vue.use(VueResource)
 
 Vue.use(ElementUI)
+
+Vue.use(VueCookie)
 
 // 全局前置守卫   https://router.vuejs.org/zh-cn/advanced/navigation-guards.html 
 // to: Route:即将进入目标 路由对象
@@ -41,7 +46,7 @@ Vue.use(ElementUI)
 // }
 new Vue({
 	router,
-	store,
+	// store,
 	el: '#app',
 	render: h => h(App),
 })

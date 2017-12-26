@@ -78,9 +78,12 @@
               password: this.loginForm.passwd
               },
               {emulateJSON: true}).then(resp => {
-                console.log(resp.data)
+                console.log(resp)
                 if (resp.data.exec === "true"){
-                  this.$router.push('main')
+                  // console.log(resp.data.XToken)
+                  this.$cookie.set('XToken', resp.data.XToken)
+                  this.$router.push('dashboard')
+                  console.log(document.cookie)
                 } else if ( resp.data.exec === "false") {
                   this.message='密码错误，请重新输入';
                   this.type='error'
