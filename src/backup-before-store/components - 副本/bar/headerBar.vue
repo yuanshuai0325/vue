@@ -1,8 +1,7 @@
 <template>
   <div class="mheader">
     <el-menu :router="true" :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
-      <el-menu-item index="dashboard">dashboard</el-menu-item>
-      <el-menu-item index="codeupdate">处理中心</el-menu-item>
+      <el-menu-item index="main">处理中心</el-menu-item>
       <el-menu-item index="cmdrun">命令执行</el-menu-item>
       <el-menu-item index="rollbackcode">代码回退</el-menu-item>
       <!-- <el-submenu index="2">

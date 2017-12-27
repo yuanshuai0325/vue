@@ -79,25 +79,24 @@
             //   password: this.loginForm.passwd
             //   },
             //   {emulateJSON: true}).then(resp => {
-              // before store
-              // axios({
-              //   method: 'post',
-              //   url: '/api/backstage/veruser/',
-              //   data: {
-              //     name: this.loginForm.username,
-              //     password: this.loginForm.passwd
-              //   },
-              //   transformRequest:[
-              //     function(data) {
-              //       let params = ''
-              //       for(let index in data) {
-              //         params += index+'='+data[index]+'&'
-              //       }
-              //       return params
-              //       }
-              //   ]
-              // }).then(resp => {
-                this.$store.dispatch('LoginByUsername', {'name': this.loginForm.username, 'password': this.loginForm.passwd}).then(resp => {
+              axios({
+                method: 'post',
+                url: '/api/backstage/veruser/',
+                data: {
+                  name: this.loginForm.username,
+                  password: this.loginForm.passwd
+                },
+                transformRequest:[
+                  function(data) {
+                    let params = ''
+                    for(let index in data) {
+                      params += index+'='+data[index]+'&'
+                    }
+                    return params
+                    }
+                ]
+              }).then(resp => {
+                console.log(resp)
                 if (resp.data.exec === "true"){
                   // console.log(resp.data.XToken)
                   this.$cookie.set('XToken', resp.data.XToken)
@@ -113,11 +112,10 @@
                   this.type='error';
                   this.open()
                 }
-            }).catch(err => {
+            }).catch(resp => {
               this.message='连接服务器错误';
               this.type='warning';
               this.open()
-              console.log(err)
             })
           } else {
             console.log('error submit!!');

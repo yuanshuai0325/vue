@@ -10,7 +10,7 @@ import VueResource from 'vue-resource'
 // 引入动画效果
 import animate from 'animate.css'
 // 引入vuex状态管理
-// import store from './store/index.js'
+import store from './store/index.js'
 
 // 引入vue-cookie 用于cookie保存
 import VueCookie from 'vue-cookie'
@@ -46,7 +46,7 @@ Vue.use(VueCookie)
 // }
 new Vue({
 	router,
-	// store,
+	store,
 	el: '#app',
 	render: h => h(App),
 })

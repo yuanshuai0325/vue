@@ -4,24 +4,24 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 // 全局使用
-import getters from './getters.js'
-import actions from './actions.js'
-import mutations from './mutations.js'
+// import getters from './getters.js'
+// import actions from './actions.js'
+// import mutations from './mutations.js'
 
 // 模块使用
 import login from './modules/login.js'
-import updatecode from './modules/updatecode.js'
-import rollbackcode from './modules/rollbackcode.js'
-import cmdrun from './modules/cmdrun.js'
+// import updatecode from './modules/updatecode.js'
+// import rollbackcode from './modules/rollbackcode.js'
+// import cmdrun from './modules/cmdrun.js'
 
 export default new Vuex.Store({
-	getters,
-	actions,
-	mutations,
+	// getters,
+	// actions,
+	// mutations,
 	modules: {
 		login,
-		updatecode,
-		rollbackcode,
-		cmdrun,
+		// updatecode,
+		// rollbackcode,
+		// cmdrun,
 	}
 })
