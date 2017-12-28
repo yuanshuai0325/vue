@@ -5,6 +5,7 @@ export function loginByUsername(formData) {
 		method: 'post',
 		url: '/veruser',
 		data: formData,
+		// emulateJSON: true,
 		transformRequest:[
 			function(data) {
 				let params = ''
