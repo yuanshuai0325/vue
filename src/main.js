@@ -15,6 +15,9 @@ import store from './store/index.js'
 // 引入vue-cookie 用于cookie保存
 import VueCookie from 'vue-cookie'
 
+// 引入带权限的异步路由
+import './permission.js'
+
 Vue.use(VueResource)
 
 Vue.use(ElementUI)

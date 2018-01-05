@@ -101,7 +101,7 @@
                 if (resp.data.exec === "true"){
                   // console.log(resp.data.XToken)
                   this.$cookie.set('XToken', resp.data.XToken)
-                  this.$cookie.set('expiretime', resp.data.expiretime)
+                  // this.$cookie.set('expiretime', resp.data.expiretime)
                   this.$router.push('dashboard')
                   console.log(document.cookie)
                 } else if ( resp.data.exec === "false") {

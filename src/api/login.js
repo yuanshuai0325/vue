@@ -17,3 +17,11 @@ export function loginByUsername(formData) {
 			]
 	})
 }
+
+export function getUserInfo(token) {
+	return request({
+		url: '/userinfo',
+		method: 'get',
+		params: { token } 
+	})
+}
