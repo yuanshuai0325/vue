@@ -5,7 +5,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 // 无需权限可访问页面
-const constantRouterMap = [
+export const constantRouterMap = [
   {
     path: '/login',
     component: resolve => { require(['components/login'], resolve) },

@@ -28,11 +28,16 @@ router.beforeEach((to, from, next) => {			//路由前进行的操作
 		if (to.path === '/') {
 			next({ path: '/login'})
 		} else {
+			console.log('permission.js 获取 store roles', store.getters)
 			if (store.getters.roles.length === 0) {
 				store.dispatch('GetUserInfo').then(resp => {
 					console.log('permission.js GetUserInfo 返回值', resp)
 					const roles = resp.data.role
+					console.log('permission.js roles值', roles)
 					store.dispatch('GenerateRoutes', {roles}).then(() => {
+						console.log('permission.js GenerateRoutes 返回值')
+						console.log('permission.js 获取添加的路由', store.getters.router)
+						// console.log(store)
 						router.addRoutes(store.getters.addRouters)
 						next({ ...to })
 					})

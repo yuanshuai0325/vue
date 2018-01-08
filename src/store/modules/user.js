@@ -17,20 +17,25 @@ const user = {
 			articlePlatform: []
 		}
 	},
-
-
+	getters: {
+		roles(state) {
+			console.log('store user.js roles值', state.roles)
+			return state.roles
+		},
+	},
 	mutations: {
 		[types.SET_CODE](state,code){
-			state.code = code;
+			state.code = code
 		},
-		[types.SET_TOKEN](state, {token}){
-			state.token = token;
+		[types.SET_TOKEN](state, token){
+			state.token = token
 		},
-		[types.SET_STATUS](state, {status}){
-			state.status = status;
+		[types.SET_STATUS](state, status){
+			state.status = status
 		},
-		[types.SET_ROLES](state, {roles}){
-			state.roles = roles;
+		[types.SET_ROLES](state, roles){
+			state.roles = roles
+			console.log('store user.js mutations roles', state.roles)
 		},
 	},
 
@@ -42,7 +47,8 @@ const user = {
 						reject('error')
 					}
 					const data = resp.data
-					commit(types.SET_ROLES, data.role)
+					console.log('store user.js GetUserInfo', data.role)
+					commit(types.SET_ROLES,data.role)
 					resolve(resp)
 				}).catch(err => {
 					reject(err)
