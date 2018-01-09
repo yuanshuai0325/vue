@@ -4,6 +4,8 @@ import store from './store'
 // 验证权限
 import { getToken, removeToken } from '@/utils/auth'
 
+import { Message } from 'element-ui'
+
 
 function hasPermission(roles, permissionRoles) {
 	// indexOf 方法返回一个整数值，指出 String 对象内子字符串的开始位置。如果没有找到子字符串，则返回-1。
@@ -115,9 +117,12 @@ router.beforeEach((to, from, next) => {			//路由前进行的操作
 								next({path: '/'})
 							})
 						})
-					} 
+					}
 					next()
 				} else {
+					Message.error({
+							message: resp.data.reason
+						})
 					store.dispatch('FedLogOut').then(() => {
 						next({path: '/'})
 					})

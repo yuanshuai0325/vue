@@ -11,6 +11,17 @@
         <el-menu-item index="2-2">选项2</el-menu-item>
         <el-menu-item index="2-3">选项3</el-menu-item>
       </el-submenu> -->
+      <div class="mname">
+        <el-dropdown @command="handleCommand">
+          <span class="el-dropdown-link">
+            用户名<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="a">用户设置</el-dropdown-item>
+            <el-dropdown-item command="b" divided>退出</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
     </el-menu>
     <div class="line"></div>
     <!-- <el-menu
@@ -57,5 +68,12 @@
   .mheader {
     padding-left:5%;
     margin-bottom: 2%;
+  }
+  .mname {
+    display: flex;
+    position: absolute;
+    right:5%;
+    top: 23px;
+   
   }
 </style>
