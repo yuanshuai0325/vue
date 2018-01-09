@@ -11,10 +11,16 @@
             <el-input v-model="loginForm.username" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="passwd">
-            <el-input type="password" v-model="loginForm.passwd" auto-complete="off"></el-input>
+            <el-input type="password" v-model="loginForm.passwd" auto-complete="off" ></el-input>
           </el-form-item>
+         <!--  <el-form-item>
+            <div class="block">
+              <span class="demonstration">拖拽完成验证</span>
+              <el-slider v-model="value1"></el-slider>
+            </div>
+          </el-form-item> -->
           <el-form-item>
-            <el-button type="primary" @click="submitForm('loginForm')">提交</el-button>
+            <el-button type="primary" @click="submitForm('loginForm')" :disabled="passdis">提交</el-button>
             <el-button @click="resetForm('loginForm')">重置</el-button>
           </el-form-item>
         </el-form>
@@ -44,12 +50,16 @@
           callback(new Error('密码长度不足，请检查'));
         } else {
           callback();
+          // @keydown.enter="submitForm('loginForm')"
+          // this.submitForm('loginForm')
+          this.passdis = false
         }
       };
       return {
         message:'',
         type:'',
         flag:false,
+        passdis:true,
         loginForm: {
           username: '',
           passwd: '',
