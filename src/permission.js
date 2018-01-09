@@ -2,7 +2,7 @@ import router from './router'
 
 import store from './store'
 // 验证权限
-import { getToken } from '@/utils/auth'
+import { getToken, removeToken } from '@/utils/auth'
 
 
 function hasPermission(roles, permissionRoles) {
@@ -21,45 +21,120 @@ function hasPermission(roles, permissionRoles) {
 		})
 }
 
-const whiteList = ['/login', '/dashboard']		//无需认证可登陆的页面
+const whiteList = ['/login', '/']		//无需认证可登陆的页面
+// router.beforeEach((to, from, next) => {			//路由前进行的操作
+// 	if (getToken()) {							//判断是否有token
+// 		console.log('permission.js 已获取token')
+// 		console.log('前往路径', to.path)
+// 		if (to.path === '/login') {
+// 			console.log('去往根路径')
+// 			store.dispatch('FedLogOut').then(() => {
+// 				next({path: '/'})
+// 			})
+// 		} else {
+// 			console.log('permission.js 获取 store roles', store.getters)
+// 			if (store.getters.roles.length === 0) {
+// 				store.dispatch('GetUserInfo').then(resp => {
+// 					console.log('permission.js GetUserInfo 返回值', resp)
+// 					const roles = resp.data.role
+// 					console.log('permission.js roles值', roles)
+// 					store.dispatch('GenerateRoutes', {roles}).then(() => {
+// 						console.log('permission.js GenerateRoutes 返回值')
+// 						console.log('permission.js 获取添加的路由', store.getters.router)
+// 						console.log('permission.js 原路由', store.getters.router)
+// 						console.log('permission.js 添加路由', store.getters.addRouters)
+// 						let newRouters = store.getters.addRouters
+// 						if (newRouters) {
+// 							router.addRoutes(store.getters.addRouters)
+// 						}
+// 						console.log('permission.js 新路由', router)
+// 						next({ ...to })
+// 					})
+// 				}).catch(() => {
+// 					console.log('执行失败')
+// 					store.dispatch('FedLogOut').then(() => {
+// 						next({path: '/'})
+// 					})
+// 				})
+// 			} else {
+// 				if (hasPermission(store.getters.roles, to.meta.role)) {
+// 					next()
+// 				} else {
+// 					next({path: '/401', query: {noGoBack: true}})
+// 				}
+// 			}
+// 		}
+// 	} else {
+// 		if (whiteList.indexOf(to.path) !== -1) {
+// 			next()
+// 		} else {
+// 			next('/')
+// 		}
+// 	}
+// })
+
 router.beforeEach((to, from, next) => {			//路由前进行的操作
-	if (getToken()) {							//判断是否有token
-		console.log('permission.js 已获取token')
-		if (to.path === '/') {
-			next({ path: '/login'})
+	console.log('去往', to.path)
+	if (getToken()) {
+		if (to.path === '/login') {
+			console.log('去往根路径')
+			store.dispatch('FedLogOut').then(() => {
+				next({path: '/'})
+			})
 		} else {
-			console.log('permission.js 获取 store roles', store.getters)
-			if (store.getters.roles.length === 0) {
-				store.dispatch('GetUserInfo').then(resp => {
-					console.log('permission.js GetUserInfo 返回值', resp)
+			console.log(1232134124, to.path)
+			store.dispatch('GetUserInfo').then(resp => {
+				let pd = resp.data.exec
+				console.log(pd)
+				if ( pd === "true" ) {
+					console.log('判断返回值',pd)
 					const roles = resp.data.role
-					console.log('permission.js roles值', roles)
-					store.dispatch('GenerateRoutes', {roles}).then(() => {
-						console.log('permission.js GenerateRoutes 返回值')
-						console.log('permission.js 获取添加的路由', store.getters.router)
-						// console.log(store)
-						router.addRoutes(store.getters.addRouters)
-						next({ ...to })
-					})
-				}).catch(() => {
-					console.log('执行失败')
+					console.log('返回roles值', roles)
+					let temp = []
+					let tempdata = store.getters.roles
+					for (let i=0; i<tempdata.length;i++) {
+						console.log('循环数组',tempdata[i])
+						temp.push(tempdata[i])
+					}
+					console.log('store roles值', store.getters.roles)
+					console.log('xxxxxx')
+					if (roles.toString() !== temp.toString()) {
+						console.log('roles值不一致')
+						store.dispatch('ChangeRoleStatus', roles)
+						console.log('dispatch 更新roles值')
+						store.dispatch('GenerateRoutes', {roles}).then(() => {
+							console.log('获取roles',roles)
+							let newRouters = store.getters.addRouters
+							if (newRouters) {
+								router.addRoutes(newRouters)
+								console.log(router)
+							}
+						}).catch(err => {
+							console.log('执行失败')
+							store.dispatch('FedLogOut').then(() => {
+								next({path: '/'})
+							})
+						})
+					} 
+					next()
+				} else {
 					store.dispatch('FedLogOut').then(() => {
 						next({path: '/'})
 					})
-				})
-			} else {
-				if (hasPermission(store.getters.roles, to.meta.role)) {
-					next()
-				} else {
-					next({path: '/401', query: {noGoBack: true}})
 				}
-			}
-		}
+			}).catch(err => {
+				store.dispatch('FedLogOut').then(() => {
+					next({path: '/'})
+				})
+			})
+		} 
+	} else if (whiteList.indexOf(to.path) !== -1) {
+		next()
 	} else {
-		if (whiteList.indexOf(to.path) !== -1) {
-			next()
-		} else {
-			next('/')
-		}
+		next({path: '/401', query: {noGoBack: true}})
 	}
 })
+
+
+
+

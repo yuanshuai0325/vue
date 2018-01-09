@@ -22,6 +22,6 @@ export function getUserInfo(token) {
 	return request({
 		url: '/userinfo',
 		method: 'get',
-		params: { token } 
+		// params: { token } 
 	})
 }

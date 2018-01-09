@@ -21,7 +21,7 @@
 		components: {
 			headerBar,
 			sideBar,
-			show,
+			codeUpdate,
 		}
 	}
 </script>

@@ -2,9 +2,9 @@
   <div class="mheader">
     <el-menu :router="true" :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
       <el-menu-item index="dashboard">dashboard</el-menu-item>
-      <el-menu-item index="codeupdate">处理中心</el-menu-item>
-      <el-menu-item index="cmdrun">命令执行</el-menu-item>
-      <el-menu-item index="rollbackcode">代码回退</el-menu-item>
+      <el-menu-item index="updatecode" v-show="headBarShow">处理中心</el-menu-item>
+      <el-menu-item index="cmdrun" v-show="headBarShow">命令执行</el-menu-item>
+      <el-menu-item index="rollbackcode" v-show="headBarShow">代码回退</el-menu-item>
       <!-- <el-submenu index="2">
         <template slot="title">我的工作台</template>
         <el-menu-item index="2-1">选项1</el-menu-item>
@@ -38,6 +38,7 @@
     data() {
       return {
         activeIndex: '',
+        headBarShow: false,
       };
     },
     methods: {
@@ -47,6 +48,7 @@
     },
     mounted(){
       this.activeIndex = this.$router.history.current.name
+      this.headBarShow = this.$store.getters.headBarShow
     }
   }
 </script>

@@ -13,6 +13,7 @@ const user = {
 		avatar: '',
 		introduction: '',
 		roles: [],
+		troles: [],
 		setting: {
 			articlePlatform: []
 		}
@@ -21,6 +22,10 @@ const user = {
 		roles(state) {
 			console.log('store user.js roles值', state.roles)
 			return state.roles
+		},
+		troles(state) {
+			console.log('store user.js troles值', state.troles)
+			return state.troles
 		},
 	},
 	mutations: {
@@ -37,6 +42,7 @@ const user = {
 			state.roles = roles
 			console.log('store user.js mutations roles', state.roles)
 		},
+		
 	},
 
 	actions: {
@@ -47,13 +53,15 @@ const user = {
 						reject('error')
 					}
 					const data = resp.data
-					console.log('store user.js GetUserInfo', data.role)
-					commit(types.SET_ROLES,data.role)
 					resolve(resp)
 				}).catch(err => {
 					reject(err)
 				})
 			})
+		},
+		ChangeRoleStatus({commit, state}, roles) {
+			console.log('store user.js ChangeRoleStatus', roles)
+			commit(types.SET_ROLES, roles)
 		},
 		LogOut({commit, state}) {
 			return new Promise((resolve, reject) => {
@@ -70,6 +78,7 @@ const user = {
 		FedLogOut({commit}) {
 			return new Promise(resolve => {
 				commit(types.SET_TOKEN, '')
+				commit(types.SET_ROLES, []),
 				removeToken()
 				resolve()
 			})

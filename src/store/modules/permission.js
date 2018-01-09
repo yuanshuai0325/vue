@@ -9,23 +9,24 @@ function hasPermission(roles, route) {
 	}
 }
 
-function fileterAsyncRouter(asyncRouterMap, roles) {
-	const accessedRouters = asyncRouterMap.filter(route => {
-		if (hasPermission(roles, route)) {
-			if (route.children && route.children.length) {
-				route.children = fileterAsyncRouter(route.children, roles)
-			}
-			return true
-		}
-		return false
-	})
-	return accessedRouters
-}
+// function fileterAsyncRouter(asyncRouterMap, roles) {
+// 	const accessedRouters = asyncRouterMap.filter(route => {
+// 		if (hasPermission(roles, route)) {
+// 			if (route.children && route.children.length) {
+// 				route.children = fileterAsyncRouter(route.children, roles)
+// 			}
+// 			return true
+// 		}
+// 		return false
+// 	})
+// 	return accessedRouters
+// }
 
 const permission = {
 	state: {
 		router: constantRouterMap,
-		addRouters: []
+		addRouters: [],
+		headBarShow: false,
 	},
 	getters: {
 		router(state) {
@@ -33,14 +34,18 @@ const permission = {
 		},
 		addRouters(state) {
 			return state.addRouters
+		},
+		headBarShow(state) {
+			return state.headBarShow
 		}
 	},
 	mutations: {
 		[types.SET_ROUTERS](state, routers) {
 			state.addRouters = routers
-			console.log('store mutations 添加异步路由', state.addRouters)
-			state.routers = constantRouterMap.concat(routers)
-			console.log('store mutations 添加异步路由后完整路由', state.routers)
+			state.headBarShow = true
+			// console.log('store mutations 添加异步路由', state.addRouters)
+			// state.routers = constantRouterMap.concat(routers)
+			// console.log('store mutations 添加异步路由后完整路由', state.routers)
 		}
 	},
 	actions: {
@@ -52,10 +57,11 @@ const permission = {
 				if (roles.indexOf('administrator') >= 0) {
 					console.log('store GenerateRoutes asyncRouterMap', asyncRouterMap)
 					accessedRouters = asyncRouterMap
-				} else {
-					accessedRouters = fileterAsyncRouter(asyncRouterMap, roles)
+					commit(types.SET_ROUTERS, accessedRouters)
 				}
-				commit(types.SET_ROUTERS, accessedRouters)
+				// } else {
+				// 	accessedRouters = fileterAsyncRouter(asyncRouterMap, roles)
+				// }
 				resolve()
 			})
 		}

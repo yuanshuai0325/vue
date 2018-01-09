@@ -98,6 +98,7 @@
               //   ]
               // }).then(resp => {
                 this.$store.dispatch('LoginByUsername', {'name': this.loginForm.username, 'password': this.loginForm.passwd}).then(resp => {
+                  console.log('sdfsdfsdfsdf',resp.data.exec)
                 if (resp.data.exec === "true"){
                   // console.log(resp.data.XToken)
                   this.$cookie.set('XToken', resp.data.XToken)
@@ -130,7 +131,7 @@
     },
     mounted () {
       this.flag=!this.flag
-    }
+    },
   }
 </script>
 
