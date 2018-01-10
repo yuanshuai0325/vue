@@ -17,6 +17,11 @@ export const constantRouterMap = [
     name: 'dashboard'
   },
   {
+    path: '/settinguser',
+    component: resolve => {require(['components/settinguser'], resolve)},
+    name: 'settinguser'
+  },
+  {
     path: '/',
     redirect: 'login'
   },

@@ -13,12 +13,12 @@
       </el-submenu> -->
       <div class="mname">
         <el-dropdown @command="handleCommand">
-          <span class="el-dropdown-link">
-            用户名<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="a">用户设置</el-dropdown-item>
-            <el-dropdown-item command="b" divided>退出</el-dropdown-item>
+          <el-button type="info" size="mini">
+            Hi，{{userName}}<i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+        <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="user setting">用户设置</el-dropdown-item>
+            <el-dropdown-item command="logout" divided>退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -49,17 +49,36 @@
     data() {
       return {
         activeIndex: '',
-        headBarShow: false,
       };
     },
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath)
+      },
+      handleCommand(command) {
+        if ( command === "logout" ) {
+            this.$destroy()
+
+          this.$store.dispatch('FedLogOut').then(() => {
+            // this.$router.push('/') 造成administrator用户登录时，路由重复加载
+            location.reload()
+          })
+        } else if (command === "user setting") {
+          // this.$router.push('usersetting')
+          this.$router.push({name:'settinguser'})
+        }
+      }
+    },
+    computed:{
+      headBarShow() {
+        return this.$store.getters.headBarShow
+      },
+      userName() {
+        return this.$store.getters.username
       }
     },
     mounted(){
       this.activeIndex = this.$router.history.current.name
-      this.headBarShow = this.$store.getters.headBarShow
     }
   }
 </script>
@@ -73,7 +92,7 @@
     display: flex;
     position: absolute;
     right:5%;
-    top: 23px;
+    top: 16px;
    
   }
 </style>

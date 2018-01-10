@@ -46,6 +46,10 @@ const permission = {
 			// console.log('store mutations 添加异步路由', state.addRouters)
 			// state.routers = constantRouterMap.concat(routers)
 			// console.log('store mutations 添加异步路由后完整路由', state.routers)
+		},
+		[types.SET_DELROUTERS](state) {
+			state.addRouters = []
+			state.headBarShow = false
 		}
 	},
 	actions: {
@@ -58,6 +62,8 @@ const permission = {
 					console.log('store GenerateRoutes asyncRouterMap', asyncRouterMap)
 					accessedRouters = asyncRouterMap
 					commit(types.SET_ROUTERS, accessedRouters)
+				} else {
+					commit(types.SET_DELROUTERS)
 				}
 				// } else {
 				// 	accessedRouters = fileterAsyncRouter(asyncRouterMap, roles)

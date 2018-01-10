@@ -106,7 +106,9 @@ router.beforeEach((to, from, next) => {			//路由前进行的操作
 						console.log('dispatch 更新roles值')
 						store.dispatch('GenerateRoutes', {roles}).then(() => {
 							console.log('获取roles',roles)
+							console.log('已有路由',router)
 							let newRouters = store.getters.addRouters
+							console.log('获取新路由',newRouters)
 							if (newRouters) {
 								router.addRoutes(newRouters)
 								console.log(router)
@@ -117,26 +119,37 @@ router.beforeEach((to, from, next) => {			//路由前进行的操作
 								next({path: '/'})
 							})
 						})
+					next({...to})
+					} else {
+						if (hasPermission(store.getters.roles, to.meta.role)) {
+							next()
+						} else {
+							next({path: '/401', query: {noGoBack: true}})
+						}
 					}
-					next()
 				} else {
-					Message.error({
-							message: resp.data.reason
-						})
+					// let message = resp.data.reason
 					store.dispatch('FedLogOut').then(() => {
-						next({path: '/'})
+						// next({path: '/', query: {noGoBack: true}})
+						location.reload()		//避免路由重复加载
+						// next({path: '/'})
 					})
+					// Message.error({
+					// 		message: message    //token提示之后加到store中
+					// })
 				}
 			}).catch(err => {
 				store.dispatch('FedLogOut').then(() => {
-					next({path: '/'})
+					next({path: '/', query: {noGoBack: true}})
 				})
 			})
 		} 
-	} else if (whiteList.indexOf(to.path) !== -1) {
-		next()
 	} else {
-		next({path: '/401', query: {noGoBack: true}})
+		if (whiteList.indexOf(to.path) !== -1) {
+			next()
+		} else {
+			next({path: '/', query: {noGoBack: true}})
+		}
 	}
 })
 

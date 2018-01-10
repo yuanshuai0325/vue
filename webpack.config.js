@@ -55,6 +55,7 @@ module.exports = {
       'codeupdate': path.resolve(__dirname, './src/components/codeupdate'),
       'codeback': path.resolve(__dirname, './src/components/codeback'),
       'runcmd': path.resolve(__dirname, './src/components/runcmd'),
+      'usersetting': path.resolve(__dirname, './src/components/usersetting'),
       // '@': resolve('src'),
       '@': path.resolve(__dirname, './src'),
     },
