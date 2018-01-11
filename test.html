@@ -20,7 +20,7 @@
 		<div>
 			<h3>子组件：{{name}}</h3>
 			<h3>子组件：{{user.age}}</h3>
-			<button @click="change">修改数据</button>
+			<button @click="change(xx)">修改数据</button>
 		</div>
 	</template>
 
@@ -48,7 +48,9 @@
 							let now = new Date();
 							document.cookie = name +"=" +expiredate
 						},
-						change(){
+						change(xx){
+							console.log(xx)
+							alert(xx)
 							// this.username='alice';
 							// this.name='alice';
 							// this.$emit('update:name','alice'); //方式2：a.使用.sync，需要显式地触发一个更新事件
