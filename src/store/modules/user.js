@@ -110,6 +110,15 @@ const user = {
 				removeToken()
 				resolve()
 			})
+		},
+		ChangeUserName({commit, state}, formData) {
+			return new Promise((resolve, reject) => {
+				changeUserName(formData).then(resp => {
+
+				}).catch(err => {
+					
+				})
+			})
 		}
 	}
 }
