@@ -5,6 +5,7 @@
       <el-menu-item index="updatecode" v-show="headBarShow">处理中心</el-menu-item>
       <el-menu-item index="cmdrun" v-show="headBarShow">命令执行</el-menu-item>
       <el-menu-item index="rollbackcode" v-show="headBarShow">代码回退</el-menu-item>
+      <el-menu-item index="settingalluser" v-show="headBarShow">用户管理</el-menu-item>
       <!-- <el-submenu index="2">
         <template slot="title">我的工作台</template>
         <el-menu-item index="2-1">选项1</el-menu-item>

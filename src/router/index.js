@@ -54,6 +54,12 @@ export const asyncRouterMap = [
     name: 'cmdrun',
     meta: { role: ['administrator'] },
   },
+  {
+    path: '/settingalluser',
+    component: resolve => { require(['components/settingalluser'], resolve) },
+    name: 'settingalluser',
+    meta: { role: ['administrator'] },
+  },
   { path: '*', redirect: '/404' },
 ]
 

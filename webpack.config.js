@@ -56,6 +56,7 @@ module.exports = {
       'codeback': path.resolve(__dirname, './src/components/codeback'),
       'runcmd': path.resolve(__dirname, './src/components/runcmd'),
       'usersetting': path.resolve(__dirname, './src/components/usersetting'),
+      'allusersetting': path.resolve(__dirname, './src/components/allusersetting'),
       // '@': resolve('src'),
       '@': path.resolve(__dirname, './src'),
     },

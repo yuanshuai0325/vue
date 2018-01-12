@@ -20,7 +20,7 @@
             </div>
           </el-form-item> -->
           <el-form-item>
-            <el-button type="primary" @click="submitForm('loginForm')" :disabled="passdis">提交</el-button>
+            <el-button type="primary" @click="submitForm('loginForm')" :disabled="passcheck">提交</el-button>
             <el-button @click="resetForm('loginForm')">重置</el-button>
           </el-form-item>
         </el-form>
@@ -52,14 +52,12 @@
           callback();
           // @keydown.enter="submitForm('loginForm')"
           // this.submitForm('loginForm')
-          this.passdis = false
+          this.passcheck = false
         }
       };
       return {
-        message:'',
-        type:'',
         flag:false,
-        passdis:true,
+        passcheck:true,
         loginForm: {
           username: '',
           passwd: '',
@@ -75,12 +73,6 @@
       };
     },
     methods: {
-      open(){
-        this.$message({
-          message: this.message,
-          type: this.type
-        });
-      },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -116,18 +108,12 @@
                   this.$router.push('dashboard')
                   console.log(document.cookie)
                 } else if ( resp.data.exec === "false") {
-                  this.message='密码错误，请重新输入';
-                  this.type='error'
-                  this.open()
-                } else {
-                  this.message='用户不存在';
-                  this.type='error';
-                  this.open()
+                  this.$message.error(resp.data.reason);
+                  this.passcheck = true;
+                  this.$refs[formName].resetFields();
                 }
             }).catch(err => {
-              this.message='连接服务器错误';
-              this.type='warning';
-              this.open()
+              this.$message.warning('连接服务器错误')
               console.log(err)
             })
           } else {

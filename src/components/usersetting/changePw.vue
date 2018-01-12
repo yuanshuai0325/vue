@@ -61,7 +61,21 @@
     		submitForm(formName) {
         		this.$refs[formName].validate((valid) => {
          	 		if (valid) {
-            			alert('submit!');
+            			this.$store.dispatch('ChangeUserPass', {'opassword':this.ruleForm.opassword, 'cpassword':this.ruleForm.cpassword}).then(resp => {
+            				console.log(resp)
+            				let pd = resp.data.exec
+            				console.log(pd)
+            				if (pd === "true") {
+            					this.$alert('密码已修改，token验证失效', '请重新登录', {confirmButtonText:'确定'})
+            					this.$router.push('/')
+            				} else {
+            					let reason = resp.data.reason
+            					this.$message.error(reason)
+            					this.$refs[formName].resetFields();
+            				}
+            			}).catch(err => {
+            				console.log(err)
+            			})
         			} else {
             			console.log('error submit!!');
             			return false;

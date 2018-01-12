@@ -1,9 +1,9 @@
 <template>
-	<div class="mcontainer" v-loading="loading.pd" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
+	<div class="mcontainer">
 		<header-bar></header-bar>
 		<side-bar></side-bar>
 		<div class="mcontainerbox">
-			<span>fsdfsdfsdf</span>
+			<all-user-setting></all-user-setting>
 		</div>
 	</div>
 </template>
@@ -11,17 +11,16 @@
 <script>
 	import sideBar from 'bar/sideBar.vue'
 	import headerBar from 'bar/headerBar.vue'
+	import allUserSetting from 'allusersetting/allUserSetting.vue'
+
 	export default {
-		data() {
-			return {
-				loading: {'pd': false},
-			}
-		},
 		components: {
-			headerBar,
 			sideBar,
+			headerBar,
+			allUserSetting
 		}
 	}
+	
 </script>
 
 <style>

@@ -1,4 +1,5 @@
 import { getUserInfo } from '@/api/login'
+import { changeUserPass } from '@/api/user'
 
 import { getToken, removeToken } from '@/utils/auth'
 
@@ -111,12 +112,14 @@ const user = {
 				resolve()
 			})
 		},
-		ChangeUserName({commit, state}, formData) {
+		ChangeUserPass({commit, state}, formData) {
+			formData.userid = state.userid
+			console.log('store user.js ChangeUserPass 添加userid', formData)
 			return new Promise((resolve, reject) => {
-				changeUserName(formData).then(resp => {
-
+				changeUserPass(formData).then(resp => {
+					resolve(resp)
 				}).catch(err => {
-					
+					reject(err)
 				})
 			})
 		}
