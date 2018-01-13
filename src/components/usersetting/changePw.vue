@@ -91,7 +91,7 @@
 
 <style scoped>
 	#changepw {
-		margin-top: 10%;
+		margin-top: 6%;
 		margin-left: 30%;
 		width: 40%;
 	}

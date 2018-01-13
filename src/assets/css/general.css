@@ -12,3 +12,18 @@
 	height: 80%;
 	width: 85%;
 }
+
+/* 用户设置使用css*/
+.usersetting {
+	width: 100%;
+}
+.userchange {
+	margin: 2% 2%;
+	height: 90%;
+	width: 96%;
+	/*border: 1px solid red;*/
+}
+.userchangecontainer {
+	margin: 0 auto;
+	text-align: center;
+}

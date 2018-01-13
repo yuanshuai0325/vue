@@ -1,13 +1,13 @@
 <template>
-	<div id="allusersetting">
-		<div id="auschange">
-			<div id="ausbutton">
+	<div class="usersetting">
+		<div class="userchange">
+			<div class="userbutton">
 				<el-button-group>
-					<el-button type="primary" plain icon="el-icon-edit" @click="changecurrent(view1)">修改密码</el-button>
-					<el-button type="primary" plain icon="el-icon-setting" @click="changecurrent(view2)">其他设置</el-button>
+					<el-button type="primary" plain icon="el-icon-edit" @click="changecurrent(view1)">用户管理</el-button>
+					<el-button type="primary" plain icon="el-icon-setting" @click="changecurrent(view2)">添加新用户</el-button>
 				</el-button-group>
 			</div>
-			<div id="auschangecontainer">
+			<div class="userchangecontainer">
 				<div>
 					<component v-bind:is="currentView"></component>
 				</div>
@@ -17,19 +17,19 @@
 </template>
 
 <script>
-	// import changePw from "./changePw.vue"
-	// import changeOther from "./changeOther.vue"
+	import addNewUser from './addNewUser.vue'
+	import allUserShow from './allUserShow.vue'
 	export default {
 		data() {
 			return {
-				view1 : changePw,
-				view2 : changeOther,
-				currentView: changePw
+				view1 : allUserShow,
+				view2 : addNewUser,
+				currentView: allUserShow
 			}
 		},
 		components: {
-			// changePw,
-			// changeOther,
+			addNewUser,
+			allUserShow
 		},
 		methods: {
 			changecurrent(viewname) {

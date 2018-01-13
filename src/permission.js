@@ -119,9 +119,11 @@ router.beforeEach((to, from, next) => {			//路由前进行的操作
 								next({path: '/'})
 							})
 						})
-					next({...to})
+						// next({...to})
+						next()
 					} else {
 						if (hasPermission(store.getters.roles, to.meta.role)) {
+							console.log('role值相同')
 							next()
 						} else {
 							next({path: '/401', query: {noGoBack: true}})
