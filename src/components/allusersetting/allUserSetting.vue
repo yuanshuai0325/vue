@@ -8,9 +8,9 @@
 				</el-button-group>
 			</div>
 			<div class="userchangecontainer">
-				<div>
+				<keep-alive>
 					<component v-bind:is="currentView"></component>
-				</div>
+				</keep-alive>
 			</div>
 		</div>
 	</div>
@@ -40,19 +40,6 @@
 </script>
 
 <style>
-#ausersetting {
-	width: 100%;
-}
-#auschange {
-	margin: 2% 2%;
-	height: 90%;
-	width: 96%;
-	/*border: 1px solid red;*/
-}
-#auschangecontainer {
-	margin: 0 auto;
-	text-align: center;
-}
 	
 </style>
 

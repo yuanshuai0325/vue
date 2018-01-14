@@ -8,9 +8,9 @@
 				</el-button-group>
 			</div>
 			<div class="userchangecontainer">
-				<div>
+				<keep-alive>
 					<component v-bind:is="currentView"></component>
-				</div>
+				</keep-alive>
 			</div>
 		</div>
 	</div>
