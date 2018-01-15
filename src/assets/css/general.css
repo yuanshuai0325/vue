@@ -24,6 +24,7 @@
 	/*border: 1px solid red;*/
 }
 .userchangecontainer {
+	height: 100%;
 	margin: 0 auto;
 	/*text-align: center;*/
 }

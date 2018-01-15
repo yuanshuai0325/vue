@@ -130,15 +130,15 @@ router.beforeEach((to, from, next) => {			//路由前进行的操作
 						}
 					}
 				} else {
-					// let message = resp.data.reason
+					let message = resp.data.reason
 					store.dispatch('FedLogOut').then(() => {
-						// next({path: '/', query: {noGoBack: true}})
-						location.reload()		//避免路由重复加载
+						next({path: '/', query: {noGoBack: true}})
+						// location.reload()		//避免路由重复加载
 						// next({path: '/'})
 					})
-					// Message.error({
-					// 		message: message    //token提示之后加到store中
-					// })
+					Message.error({
+							message: message    //token提示之后加到store中
+					})
 				}
 			}).catch(err => {
 				store.dispatch('FedLogOut').then(() => {

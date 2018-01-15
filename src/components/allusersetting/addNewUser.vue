@@ -18,8 +18,8 @@
 			  	</el-row>
 			  	<el-row>
 					<el-col :span="6">
-	  					<el-form-item label="激活" prop="activate">
-    						<el-switch v-model="ruleForm.activate"></el-switch>
+	  					<el-form-item label="激活" prop="status">
+    						<el-switch v-model="ruleForm.status"></el-switch>
   						</el-form-item>
   					</el-col>
   				</el-row>
@@ -64,7 +64,7 @@
 				ruleForm: {
 					username: '',
 					password: '',
-					activate: true,
+					status: true,
 					role: "2",
 				},
 				rules: {
@@ -83,7 +83,21 @@
     		submitForm(formName) {
         		this.$refs[formName].validate((valid) => {
          	 		if (valid) {
-         	 			alert(1)
+         	 			this.$store.dispatch('AddNewUser',this.ruleForm).then(resp => {
+         	 				console.log(resp)
+         	 				let pd = resp.data.exec
+         	 				let reason = resp.data.reason
+         	 				if (pd === 'true') {
+         	 					this.$message.success(reason)
+         	 				} else {
+         	 					this.$message.error(reason)
+         	 				}
+         	 				this.$refs[formName].resetFields();
+         	 				this.usercheck = true
+
+         	 			}).catch(err => {
+         	 				console.log(err)
+         	 			})
         			} else {
             			console.log('error submit!!');
             			return false;

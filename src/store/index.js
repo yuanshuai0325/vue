@@ -11,6 +11,7 @@ Vue.use(Vuex)
 // 模块使用
 import login from './modules/login.js'
 import user from './modules/user.js'
+import allusersetting from './modules/allusersetting.js'
 import permission from './modules/permission.js'
 // import updatecode from './modules/updatecode.js'
 // import rollbackcode from './modules/rollbackcode.js'
@@ -23,6 +24,7 @@ export default new Vuex.Store({
 	modules: {
 		login,
 		user,
+		allusersetting,
 		permission,
 		// updatecode,
 		// rollbackcode,
