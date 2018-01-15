@@ -34,26 +34,49 @@
 				</template>
 			</el-table-column>
 		</el-table>
+		<el-dialog :title="title" :visible.sync="dialogFormVisible">
+			<el-form :model="form">
+				<el-form-item label="新密码">
+					<el-input v-model="form.password" auto-complete="off"></el-input>
+				</el-form-item>
+			</el-form>
+			<div solt="footer" class="dialog-footer">
+				<el-row>
+					<el-col :span="3" :offset="9">
+						<el-button @click="dialogFormVisible = false">取消</el-button>
+					</el-col>
+					<el-col :span="3">
+						<el-button type="primary" @click="changeusrpass">确定</el-button>
+					</el-col>
+				</el-row>
+			</div>
+		</el-dialog>
 	</div>
 </template>
 
 <script>
 	export default {
-		// data() {
-		// 	return {
-		// 		tableData: [
-		// 			{
-		// 				userid: '1',
-		// 				username: 'tom',
-		// 				code: true,
-		// 				role: 'administrator',
-		// 			}
-		// 		]
-		// 	}
-		// },
+		data() {
+			return {
+				dialogFormVisible: false,
+				title: '',
+				form: {
+					userid: '',
+					username: '',
+					password: '',
+				},
+			}
+		},
 		methods: {
 			handleEdit(index, row) {
-				console.log(index, row)
+				this.title = '更改用户 '+row.username+' 密码'
+				this.form.userid = row.userid
+				this.form.username = row.username
+				this.dialogFormVisible = true
+			},
+			changeusrpass() {
+				this.dialogFormVisible = false
+				console.log(this.form)
 			},
 			handleDel(index, row) {
 				this.$alert('请确认删除用户'+row.username, '危险操作', {
