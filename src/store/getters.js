@@ -1,5 +1,5 @@
 const getters = {
-	roles: state => state.user.roles
+	loading: state => state.loading
 }
 
 export default getters

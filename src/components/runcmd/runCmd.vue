@@ -25,7 +25,15 @@
 				</el-table-column>
 			</el-table>
 		</div>
-		<div id="rcdisplay">
+		<div id="rcdisplay" v-show="cardshow">
+			<el-card class="box-card">
+  				<div slot="header" class="clearfix">
+    				<span>卡片名称</span>
+			  	</div>
+  				<div class="text item">
+    				{{cmdreturn}}
+  				</div>
+			</el-card>
 		</div>
 	</div>
 </template>
@@ -36,40 +44,72 @@
 		data() {
 			return {
 				value: '',
-				hosts: [],
+				// hosts: [], 
 			}
 		},
 		methods: {
 			change(value) {
 				console.log(value);
+				console.log(this.$store)
+				this.$store.dispatch('ChangeCardShow', false)
 				if (value) {
-					axios.get('/api/backstage/prohosts',{params:{'project':value}}).then(resp => {
-					this.hosts = resp.data.hosts
-					console.log(resp)
-					}).catch(err => {console.log(err)})
+					this.$store.dispatch('GetProjectHosts', value).then(resp => {console.log(resp)}).catch(err => {console.log(err)})
 				}
 			},
 			start(host) {
 				console.log(this.value,host)
-				axios({
-					method: 'post',
-					url: '/api/backstage/cmdrun',
-					data: 'tgt='+host+'&project='+this.value+'&cmd=start'
-				}).then(resp => {console.log(resp)}).catch(err => {console.log(err)})
+				this.$store.dispatch('ChangeLoading')
+				let data = {
+					'tgt':host,
+					'project':this.value,
+					'cmd':'start',
+				}
+				this.$store.dispatch('CmdRun', data).then(resp => {console.log(this.$store.getters.loading);console.log(this.cmdreturn);this.$store.dispatch('ChangeLoading')
+				}).catch(err => {console.log(err);this.$store.dispatch('ChangeLoading')})
 			},
 			stop(host) {
 				console.log(this.value,host)
+				this.$store.dispatch('ChangeLoading')
+				let data = {
+					'tgt':host,
+					'project':this.value,
+					'cmd':'stop',
+				}
+				this.$store.dispatch('CmdRun', data).then(resp => {console.log(resp);console.log(this.cmdreturn);this.$store.dispatch('ChangeLoading')}).catch(err => {console.log(err);this.$store.dispatch('ChangeLoading')})
 			},
 			restart(host) {
 				console.log(this.value,host)
+				this.$store.dispatch('ChangeLoading')
+				let data = {
+					'tgt':host,
+					'project':this.value,
+					'cmd':'restart',
+				}
+				this.$store.dispatch('CmdRun', data).then(resp => {console.log(resp);console.log(this.cmdreturn);this.$store.dispatch('ChangeLoading')}).catch(err => {console.log(err);this.$store.dispatch('ChangeLoading')})
 			},
 			tail(host) {
 				console.log(this.value,host)
+				this.$store.dispatch('ChangeLoading')
+				let data = {
+					'tgt':host,
+					'project':this.value,
+					'cmd':'tail',
+				}
+				this.$store.dispatch('CmdRun', data).then(resp => {console.log(resp);console.log(this.cmdreturn);this.$store.dispatch('ChangeLoading')}).catch(err => {console.log(err);this.$store.dispatch('ChangeLoading')})
 			},
 		},
 		computed: {
 			options() {
 				return this.$store.getters.repodir
+			},
+			hosts() {
+				return this.$store.getters.prohosts
+			},
+			cmdreturn() {
+				return this.$store.getters.cmdreturn
+			},
+			cardshow() {
+				return this.$store.getters.cardshow
 			}
 		},
 		mounted(){
@@ -86,6 +126,7 @@
 		position: absolute;
 		/*border:1px solid blue;*/
 		margin: 9% 1% 1% 8%;
+		/*width: 25%;*/
 	}
 	#rctable {
 		position: absolute;
@@ -97,5 +138,6 @@
 		/*border: 1px solid red;*/
 		right: 2%;
 		width: 60%;
+		margin-top: 6%;
 	}
 </style>
