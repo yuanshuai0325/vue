@@ -1,4 +1,4 @@
-import {addNewUser, getAllUser, changeUserCode, delUser} from '@/api/allusersetting'
+import {addNewUser, getAllUser, changeUserCode, delUser, changeUserPassword} from '@/api/allusersetting'
 
 import * as types from '../mutation-types.js'
 
@@ -26,8 +26,10 @@ const allusersetting = {
 					console.log('服务器返回值',resp.data)
 					if (pd === 'true') {
 						commit(types.SET_GETALLUSER, resp.data.data)
+						resolve('数据更新成功')
+					} else {
+						reject('数据更新失败')
 					}
-					resolve('数据更新成功')
 				}).catch(err => {
 					reject('数据获取失败')
 				})
@@ -54,6 +56,15 @@ const allusersetting = {
 		DelUser({commit}, user) {
 			return new Promise((resolve,reject) => {
 				delUser(user).then(resp => {
+					resolve(resp)
+				}).catch(err => {
+					reject(err)
+				})
+			})
+		},
+		ChangeUserPassword({commit},password) {
+			return new Promise((resolve, reject) => {
+				changeUserPassword(password).then(resp => {
 					resolve(resp)
 				}).catch(err => {
 					reject(err)

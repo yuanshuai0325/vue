@@ -36,7 +36,6 @@
 		data() {
 			return {
 				value: '',
-				options: '',
 				hosts: [],
 			}
 		},
@@ -68,12 +67,14 @@
 				console.log(this.value,host)
 			},
 		},
+		computed: {
+			options() {
+				return this.$store.getters.repodir
+			}
+		},
 		mounted(){
-			axios.get('/api/backstage/repodir').then(resp => {
-				console.log(resp.data.repodir);
-				this.options = resp.data.repodir
-			}).catch(err => {console.log(err)})
-		}
+			this.$store.dispatch('GetRepoDir').then(resp => {console.log(resp)}).catch(err => {console.log(err)})
+		} 
 	}
 </script>
 

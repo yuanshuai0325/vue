@@ -35,8 +35,8 @@
 			</el-table-column>
 		</el-table>
 		<el-dialog :title="title" :visible.sync="dialogFormVisible">
-			<el-form :model="form">
-				<el-form-item label="新密码">
+			<el-form :model="form" :rules="rules" ref="adminform" status-icon>
+				<el-form-item label="新密码" prop="password">
 					<el-input v-model="form.password" auto-complete="off"></el-input>
 				</el-form-item>
 			</el-form>
@@ -46,7 +46,7 @@
 						<el-button @click="dialogFormVisible = false">取消</el-button>
 					</el-col>
 					<el-col :span="3">
-						<el-button type="primary" @click="changeusrpass">确定</el-button>
+						<el-button type="primary" @click="changeusrpass('adminform')">确定</el-button>
 					</el-col>
 				</el-row>
 			</div>
@@ -65,6 +65,12 @@
 					username: '',
 					password: '',
 				},
+				rules: {
+					password: [
+						{ required: true, message: '请输入密码', trigger: 'blur' },
+            			{ min: 3, message: '最少3个字符', trigger: 'blur'}
+					],
+				}
 			}
 		},
 		methods: {
@@ -74,9 +80,18 @@
 				this.form.username = row.username
 				this.dialogFormVisible = true
 			},
-			changeusrpass() {
+			changeusrpass(formName) {
 				this.dialogFormVisible = false
 				console.log(this.form)
+				this.$store.dispatch('ChangeUserPassword', this.form).then(resp => {
+					let pd = resp.data.exec
+					if (pd === 'true') {
+						this.$message.success(resp.data.reason)
+					} else {
+						this.$message.error(resp.data.reason)
+					}
+				}).catch(err => {console.log(err)})
+				this.$refs[formName].resetFields()
 			},
 			handleDel(index, row) {
 				this.$alert('请确认删除用户'+row.username, '危险操作', {

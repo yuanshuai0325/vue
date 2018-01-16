@@ -61,3 +61,22 @@ export function delUser(formData) {
 			]
 	})
 }
+
+export function changeUserPassword(formData) {
+	console.log(formData)
+	return request({
+		method: 'post',
+		url: '/admincpw',
+		data: formData,
+		// emulateJSON: true,
+		transformRequest:[
+			function(data) {
+				let params = ''
+				for(let index in data) {
+				  params += index+'='+data[index]+'&'
+				}
+				return params
+				}
+			]
+	})
+}
