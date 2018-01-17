@@ -26,4 +26,11 @@ export const SET_CMDRUN = 'SET_CMDRUN'
 //卡片显示
 export const SET_CARDSHOW = 'SET_CARDSHOW'
 
+//rollbackcode
+//获取项目目录
+export const SET_PROJECT_DIR = 'SET_PROJECT_DIR'
+//获取项目路径
+export const SET_PATH = 'SET_PATH'
+//获取项目名
+export const SET_PROJECT = 'SET_PROJECT'
 

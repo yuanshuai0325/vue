@@ -29,35 +29,33 @@
 <script>
 	import axios from 'axios'
 	export default {
-		props:['loading'],
+		// props:['loading'],
 		data() {
 			return {
-				options: '',
 				value: '',
-				projectdir: [],
-				path: '',
-				project: '',
 			}
 		},
 		methods: {
 			change(value) {
 				console.log(value)
 				if (value) {
-					axios.get('/api/backstage/prodir',{params:{'dirname':value}}).then(resp => {
-					// console.log(resp.data.prodir);
-					// console.log(resp.data.path);
-					this.path = resp.data.path
+					// axios.get('/api/backstage/prodir',{params:{'dirname':value}}).then(resp => {
+					// // console.log(resp.data.prodir);
+					// // console.log(resp.data.path);
+					// this.path = resp.data.path
 
-					this.projectdir = resp.data.prodir
-					this.project = resp.data.project
-					console.log(this.projectdir)
-					}).catch(err => {console.log(err)})
+					// this.projectdir = resp.data.prodir
+					// this.project = resp.data.project
+					// console.log(this.projectdir)
+					// }).catch(err => {console.log(err)})
+					this.$store.dispatch('GetProjectDir', value).then(resp => {console.log(resp)}).catch(err => {console.log(err)})
 				}
 			},
 			clear() {
-				this.path = '';
-				this.projectdir = [];
-				this.project = '';
+				// this.path = '';
+				// this.projectdir = [];
+				// this.project = '';
+				this.$store.dispatch('ClearProjectDir')
 			},
 			rollbackdir(dir) {
 				this.loading.pd = true;
@@ -87,32 +85,45 @@
 			},
 			deldir(deldir) {
 				// console.log(deldir)
-				axios({
-					method: 'post',
-					url: '/api/backstage/deldir',
-					data: [this.project, deldir],
-					transformRequest:[
-						function(data) {
-							return 'project='+data[0]+'&deldir='+data[1]
-						}
-					]
-				}).then(resp => {console.log(resp);
-					if (resp.data === true) {
-						this.$message({
-							message: deldir + '已删除',
-							type: 'success',
-						})
-					}
-					this.change(this.value)
-				}).catch(err => {console.log(err)});
+				// axios({
+				// 	method: 'post',
+				// 	url: '/api/backstage/deldir',
+				// 	data: [this.project, deldir],
+				// 	transformRequest:[
+				// 		function(data) {
+				// 			return 'project='+data[0]+'&deldir='+data[1]
+				// 		}
+				// 	]
+				// }).then(resp => {console.log(resp);
+				// 	if (resp.data === true) {
+				// 		this.$message({
+				// 			message: deldir + '已删除',
+				// 			type: 'success',
+				// 		})
+				// 	}
+				// 	this.change(this.value)
+				// }).catch(err => {console.log(err)});
+				this.$store.dispatch('DelDir', {'project':this.project, 'deldir':deldir, 'value':this.value}).then(resp=>{console.log(resp)}).catch(err=>{console.log(err)})
+			}
+		},
+		computed: {
+			options() {
+				return this.$store.getters.repodir
+			},
+			projectdir() {
+				return this.$store.getters.projectdir
+			},
+			path() {
+				return this.$store.getters.path
+			},
+			project() {
+				return this.$store.getters.project
 			}
 		},
 		mounted(){
-			axios.get('/api/backstage/repodir').then(resp => {
-				console.log(resp.data.repodir);
-				this.options = resp.data.repodir
-			}).catch(err => {console.log(err)})
-		}
+			this.$store.dispatch('GetRepoDir').then(resp => {console.log(resp)}).catch(err => {console.log(err)})
+			this.clear()
+		} 
 	}
 	
 </script>

@@ -114,6 +114,7 @@
 		},
 		mounted(){
 			this.$store.dispatch('GetRepoDir').then(resp => {console.log(resp)}).catch(err => {console.log(err)})
+			this.$store.dispatch('ChangeCardShow', false)
 		} 
 	}
 </script>
