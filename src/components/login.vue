@@ -20,7 +20,7 @@
             </div>
           </el-form-item> -->
           <el-form-item>
-            <el-button type="primary" @click="submitForm('loginForm')" :disabled="passcheck">提交</el-button>
+            <el-button type="primary" @click="submitForm('loginForm')" @keydown.enter="submitForm('loginForm')">提交</el-button>
             <el-button @click="resetForm('loginForm')">重置</el-button>
           </el-form-item>
         </el-form>
@@ -49,15 +49,14 @@
         } else if (value.length < 2) {
           callback(new Error('密码长度不足，请检查'));
         } else {
+          // this.passcheck = false
           callback();
           // @keydown.enter="submitForm('loginForm')"
           // this.submitForm('loginForm')
-          this.passcheck = false
         }
       };
       return {
         flag:false,
-        passcheck:true,
         loginForm: {
           username: '',
           passwd: '',

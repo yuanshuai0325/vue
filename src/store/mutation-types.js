@@ -37,4 +37,5 @@ export const SET_PROJECT = 'SET_PROJECT'
 //updatecode
 //获取文件列表
 export const SET_FILE_LIST = 'SET_FILE_LIST'
-
+//禁用按键
+export const SET_BTN_DISABLED = 'SET_BTN_DISABLED'
