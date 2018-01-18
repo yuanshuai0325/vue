@@ -34,3 +34,7 @@ export const SET_PATH = 'SET_PATH'
 //获取项目名
 export const SET_PROJECT = 'SET_PROJECT'
 
+//updatecode
+//获取文件列表
+export const SET_FILE_LIST = 'SET_FILE_LIST'
+

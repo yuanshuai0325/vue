@@ -141,19 +141,18 @@
 				})
 			},
 			fileChange() {
-				// axios({
-				// 	method: 'get',
-				// 	url: '/api/backstage/listfile',
-				// }).then(resp => {
-				// 	if (resp.data.filelist.length > 0) {
-				// 		this.filelist = resp.data.filelist;
-				// 		this.bflag = true
-				// 	} else {
-				// 		this.filelist = [];
-				// 		this.bflag = false
-				// 	}
-				// }).catch(err => {console.log(err)})
-				this.$store.dispatch('ListFile').then(resp => {console.log(resp)}).catch(err => {console.log(err)})
+				axios({
+					method: 'get',
+					url: '/api/backstage/listfile',
+				}).then(resp => {
+					if (resp.data.filelist.length > 0) {
+						this.filelist = resp.data.filelist;
+						this.bflag = true
+					} else {
+						this.filelist = [];
+						this.bflag = false
+					}
+				}).catch(err => {console.log(err)})
 			},
 			open() {
 				this.$message({
@@ -184,45 +183,44 @@
       		},
       		handleBack(row) {
       			// console.log(row);
-    //   			axios({
-				// 	method: 'post',
-				// 	url: '/api/backstage/backupfile',
-				// 	data: row,
-				// 	transformRequest:[
-				// 		function(data) {
-				// 			let params = ''
-				// 			for(let index in data) {
-				// 				params += 'filename=' + data[index].filename + '&'
-				// 			}
-				// 			return params
-				// 		}
-				// 	]
-				// }).then(resp=>{
-				// 	let successlist = resp.data.successlist;
-				// 	let faillist = resp.data.faillist;
-				// 	for (let index in successlist) {
-				// 		// let now = new Date();
-				// 		// console.log(now.getTime())
-				// 		// let exitTime = now.getTime() + 1000
-				// 		// while (true) {
-				// 		// 	now = new Date();
-				// 		// 	if (now.getTime() > exitTime) {
-				// 		// 		break;
-				// 		// 	}
-				// 		// }
-				// 		this.title = '备份成功！';
-				// 		this.message = successlist[index];
-				// 		this.type = 'success';
-				// 		this.open2()
-				// 	};
-				// 	for (let index in faillist) {
-				// 		this.title = '备份失败！';
-				// 		this.message = '请检查'+faillist[index]+'是否合规';
-				// 		this.type = 'error';
-				// 		this.open2()
-				// 	}
-				// }).catch(err=>{console.log(err)})
-				this.$store.dispatch('BackUpFile',filename).then(resp => {console.log(resp)}).catch(err => {console.log(err)})
+      			axios({
+					method: 'post',
+					url: '/api/backstage/backupfile',
+					data: row,
+					transformRequest:[
+						function(data) {
+							let params = ''
+							for(let index in data) {
+								params += 'filename=' + data[index].filename + '&'
+							}
+							return params
+						}
+					]
+				}).then(resp=>{
+					let successlist = resp.data.successlist;
+					let faillist = resp.data.faillist;
+					for (let index in successlist) {
+						// let now = new Date();
+						// console.log(now.getTime())
+						// let exitTime = now.getTime() + 1000
+						// while (true) {
+						// 	now = new Date();
+						// 	if (now.getTime() > exitTime) {
+						// 		break;
+						// 	}
+						// }
+						this.title = '备份成功！';
+						this.message = successlist[index];
+						this.type = 'success';
+						this.open2()
+					};
+					for (let index in faillist) {
+						this.title = '备份失败！';
+						this.message = '请检查'+faillist[index]+'是否合规';
+						this.type = 'error';
+						this.open2()
+					}
+				}).catch(err=>{console.log(err)})
 
 				// axios({
 				// 	method: 'get',
@@ -280,11 +278,6 @@
       			this.handleUpdate(this.multipleSelection)
       		},
 
-		},
-		computed: {
-			filelist() {
-				return this.$store.getters.fileList
-			}
 		},
 		created() {
 			// console.log(1)

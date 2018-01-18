@@ -6,7 +6,14 @@
 	    		</el-option>
 			</el-select><br><br>
 			<el-tag type="success" v-show="path">代码路径：{{path}}</el-tag><br>
-			<el-tag type="success" v-show="project">所属项目：{{project}}</el-tag>
+			<el-tag type="success" v-show="project">所属项目：{{project}}</el-tag><br>
+			<el-table :data="hosts" v-show="project" >
+				<el-table-column label="涉及主机">
+					<template slot-scope="scope">
+						<el-tag type="success">{{scope.row.host}}</el-tag>
+					</template>
+				</el-table-column>
+			</el-table>
 		</div>
 		<div id="cbtable">
 			<el-table :data="projectdir" :default-sort="{prop: 'date', order: 'descending'}">
@@ -49,6 +56,7 @@
 					// console.log(this.projectdir)
 					// }).catch(err => {console.log(err)})
 					this.$store.dispatch('GetProjectDir', value).then(resp => {console.log(resp)}).catch(err => {console.log(err)})
+					this.$store.dispatch('GetProjectHosts', value).then(resp => {console.log(resp)}).catch(err => {console.log(err)})
 				}
 			},
 			clear() {
@@ -58,30 +66,51 @@
 				this.$store.dispatch('ClearProjectDir')
 			},
 			rollbackdir(dir) {
-				this.loading.pd = true;
-				axios({
-					method: 'post',
-					url: '/api/backstage/rollbackpath',
-					data: [this.project,dir],
-					transformRequest:[
-						function(data) {
-							return 'project='+data[0]+'&sdir='+data[1]
-						}
-					]
-				}).then(resp => {console.log(resp);
-					let pdata = '';
-					let data = resp.data.successdata;
-					for (let item1 in data) {
-						pdata += item1 + '<br>'
-						for (let item2 in data[item1]) {
-							for (let item3 in data[item1][item2])
-								pdata += item3 + ' : ' + data[item1][item2][item3]+ '<br>'
-						}
-					};
-					this.$alert('<html>'+pdata+'</html>', {dangerouslyUseHTMLString: true, showClose: false});
-					this.change(this.value);
-					this.loading.pd = false;
-				}).catch(err => {console.log(err)});
+				// this.loading.pd = true;
+				this.$store.dispatch('ChangeLoading')
+				// axios({
+				// 	method: 'post',
+				// 	url: '/api/backstage/rollbackpath',
+				// 	data: [this.project,dir],
+				// 	transformRequest:[
+				// 		function(data) {
+				// 			return 'project='+data[0]+'&sdir='+data[1]
+				// 		}
+				// 	]
+				// }).then(resp => {console.log(resp);
+				// 	let pdata = '';
+				// 	let data = resp.data.successdata;
+				// 	for (let item1 in data) {
+				// 		pdata += item1 + '<br>'
+				// 		for (let item2 in data[item1]) {
+				// 			for (let item3 in data[item1][item2])
+				// 				pdata += item3 + ' : ' + data[item1][item2][item3]+ '<br>'
+				// 		}
+				// 	};
+				// 	this.$alert('<html>'+pdata+'</html>', {dangerouslyUseHTMLString: true, showClose: false});
+				// 	this.change(this.value);
+				// 	// this.loading.pd = false;
+				// 	this.$store.dispatch('ClearProjectDir')
+				// }).catch(err => {console.log(err)});
+				let data = {
+					'project': this.project,
+					'sdir': dir
+				}
+				this.$store.dispatch('RollBackCode', data).then(resp => {
+					this.$store.dispatch('GetProjectDir', this.value)
+					this.$store.dispatch('ChangeLoading')
+					let pd = resp.data.exec
+					if (pd === 'true') {
+						this.$alert('<html>'+this.formatJson(resp.data.successdata)+'</html>', {dangerouslyUseHTMLString: true,})
+					} else {
+						this.$message.error(resp.data.reason)
+					}
+					console.log(resp)
+				}).catch(err => {
+					this.$store.dispatch('ChangeLoading')
+					console.log(err)
+				})
+
 			},
 			deldir(deldir) {
 				// console.log(deldir)
@@ -103,7 +132,20 @@
 				// 	}
 				// 	this.change(this.value)
 				// }).catch(err => {console.log(err)});
-				this.$store.dispatch('DelDir', {'project':this.project, 'deldir':deldir, 'value':this.value}).then(resp=>{console.log(resp)}).catch(err=>{console.log(err)})
+				this.$store.dispatch('DelDir', {'project':this.project, 'deldir':deldir, 'value':this.value}).then(resp=>{
+						console.log(resp)
+						let pd = resp.data.exec
+						if (pd === 'true') {
+							this.$message.success(resp.data.reason)
+						} else {
+							this.$message.error(resp.data.reason)
+						}
+					}).catch(err=>{console.log(err)})
+			},
+			formatJson(data) {
+				let json = JSON.stringify(data, null,2)
+				json = json.replace(/{/g, '{<br>&nbsp;&nbsp;&nbsp;&nbsp;').replace(/,/, ',<br><br>&nbsp;&nbsp;&nbsp;&nbsp;').replace(/:(\s*"\w)/g, ':<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$1').replace(/}/g, '<br>&nbsp;&nbsp;&nbsp;&nbsp;}')
+				return json
 			}
 		},
 		computed: {
@@ -118,7 +160,10 @@
 			},
 			project() {
 				return this.$store.getters.project
-			}
+			},
+			hosts() {
+				return this.$store.getters.prohosts
+			},
 		},
 		mounted(){
 			this.$store.dispatch('GetRepoDir').then(resp => {console.log(resp)}).catch(err => {console.log(err)})

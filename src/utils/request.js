@@ -46,7 +46,7 @@ import axios from 'axios'
 
 var instance = axios.create({
   baseURL: '/api/backstage',
-  timeout: 3000,
+  timeout: 20000,
 });
 
 // Add a request interceptor

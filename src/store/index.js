@@ -14,7 +14,7 @@ import login from './modules/login.js'
 import user from './modules/user.js'
 import allusersetting from './modules/allusersetting.js'
 import permission from './modules/permission.js'
-// import updatecode from './modules/updatecode.js'
+import updatecode from './modules/updatecode.js'
 import rollbackcode from './modules/rollbackcode.js'
 import cmdrun from './modules/cmdrun.js'
 
@@ -28,7 +28,7 @@ export default new Vuex.Store({
 		user,
 		allusersetting,
 		permission,
-		// updatecode,
+		updatecode,
 		rollbackcode,
 		cmdrun,
 	}

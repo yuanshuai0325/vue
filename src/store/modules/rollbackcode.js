@@ -1,4 +1,4 @@
-import { getProjectDir, delDir } from '@/api/codeback'
+import { getProjectDir, delDir, rollBackCode } from '@/api/codeback'
 
 import * as types from '../mutation-types.js'
 
@@ -62,6 +62,17 @@ const rollbackcode = {
 					}
 					resolve(resp)
 				}).catch(err => {
+					reject(err)
+				})
+			})
+		},
+		RollBackCode({commit}, path) {
+			return new Promise((resolve, reject) => {
+				rollBackCode(path).then(resp => {
+					console.log(resp)
+					resolve(resp)
+				}).catch(err => {
+					console.log(err)
 					reject(err)
 				})
 			})

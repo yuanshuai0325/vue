@@ -27,3 +27,21 @@ export function delDir(deldir) {
 			]
 	})
 }
+
+export function rollBackCode(path) {
+	return request({
+		method: 'post',
+		url: '/rollbackpath',
+		data: path,
+		// emulateJSON: true,
+		transformRequest:[
+			function(data) {
+				let params = ''
+				for(let index in data) {
+				  params += index+'='+data[index]+'&'
+				}
+				return params
+				}
+			]
+	})
+}
