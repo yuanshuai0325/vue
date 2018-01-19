@@ -11,10 +11,10 @@
 			multiple>
 			<i class="el-icon-upload"></i>
 			<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-			<div class="el-upload__tip" slot="tip">只能上传文件</div>
+			<div class="el-upload__tip" slot="tip">只能上传文件,不要在上传过程中进行删除操作</div>
 		</el-upload>
 		<div id="mtable">
-			<el-table ref="multipleTable" tooltip-effect="dark" :data="filelist" @selection-change="handleSelectionChange">
+			<el-table ref="multipleTable" tooltip-effect="dark" :data="tablefile" @selection-change="handleSelectionChange">
 				<el-table-column type="selection">
 				</el-table-column>
 				<el-table-column label="已上传文件">
@@ -32,10 +32,10 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<el-button-group id="mbutton">
-				<el-button @click="handleBackSelection">备份选中</el-button>
-				<el-button @click="handleUpdateSelection">更新选中</el-button>
-				<el-button @click="handleDelSelection">删除选中</el-button>
+			<el-button-group id="mbutton" v-if="tablefile.length">
+				<el-button @click="handleBackSelection" :disabled="btndisabled">备份选中</el-button>
+				<el-button @click="handleUpdateSelection" :disabled="btndisabled">更新选中</el-button>
+				<el-button @click="handleDelSelection" :disabled="btndisabled">删除选中</el-button>
 			</el-button-group>
 		</div>
 	</div>
@@ -52,7 +52,8 @@
 		},
 		methods: {
 			beforeUpload(file){
-				this.$store.dispatch('ChangeDisabled')
+				this.$store.dispatch('ChangeDisabled', 1)
+				this.$store.dispatch('TableTmp', 1)
 			},			
 			uploadSuccess(resp){
 				let pd = resp.exec
@@ -62,8 +63,11 @@
 				} else {
 					this.$message.error(resp.reason)
 				}
+				this.$store.dispatch('ChangeDisabled', -1)
+				this.$store.dispatch('TableTmp', -1)
 			},
-			fileRemove: function(file) {
+			fileRemove: function(file, fileList) {
+				console.log(file)
 				axios({
 					method: 'post',
 					url: '/api/backstage/delfile',
@@ -79,9 +83,11 @@
 					]
 				}).then(resp => {
 					// console.log(resp.data)
+					    console.log('1111111',fileList)
+						this.$store.dispatch('DelUploadFile', file.name)
 						this.fileChange();
 						
-				}).catch(err => {
+				}).catch(err => { console.log(err)
 				})
 			},
 			fileChange() {
@@ -102,7 +108,7 @@
 			handleDel(index, row) {
 				// console.log(index, row)
 				// console.log(row.filename)
-				this.fileRemove({'name': row.filename}, {'name': row.filename})
+				this.fileRemove({'name': row.name})
 			},
 			handleDelSelection() {
 				for (let i in this.multipleSelection) {
@@ -215,12 +221,15 @@
 			filelist() {
 				return this.$store.getters.filelist
 			},
+			tablefile() {
+				return this.$store.getters.tablefile
+			},
 			btndisabled() {
 				return this.$store.getters.btndisabled
 			}
 		},
 		created() {
-			// console.log(1)
+			this.$store.dispatch('UploadFile').then(resp => {console.log(resp)}).catch(err => {console.log(err)})
 			this.fileChange()
 		},
 	}
