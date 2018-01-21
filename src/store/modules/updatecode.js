@@ -1,4 +1,4 @@
-import { backUpFile, listFile } from '@/api/codeupdate'
+import { backUpFile, listFile, delFile } from '@/api/codeupdate'
 
 import * as types from '../mutation-types.js'
 
@@ -98,6 +98,15 @@ const codeupdate = {
 					resolve(resp)
 				}).catch(err => {
 					reject(resp)
+				})
+			})
+		},
+		DelFile({commit}, data) {
+			return new Promise((resolve, reject) => {
+				delFile(data).then(resp => {
+					resolve(resp)
+				}).catch(err => {
+					reject(err)
 				})
 			})
 		},

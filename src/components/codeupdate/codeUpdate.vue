@@ -4,6 +4,7 @@
 			class="upload-demo"
 			drag
 			:before-upload="beforeUpload"
+			:on-error="onError"
 			:on-success="uploadSuccess"
 			:on-remove="fileRemove"
 			:file-list="filelist"
@@ -26,7 +27,7 @@
 				</el-table-column>
 				<el-table-column label="操作">
 					<template slot-scope="scope">
-						<el-button size="mini" type="primary" :disabled="btndisabled" @click="handleBack([{'filename': scope.row.name}])">备份</el-button>
+						<el-button size="mini" type="primary" :disabled="btndisabled" @click="handleBack([scope.row])">备份</el-button>
 						<el-button size="mini" type="warning" :disabled="btndisabled" @click="handleUpdate([{'filename': scope.row.name}])">更新</el-button>
 						<el-button size="mini" type="danger" :disabled="btndisabled" @click="handleDel(scope.$index, scope.row)">删除</el-button>
 					</template>
@@ -54,6 +55,9 @@
 			beforeUpload(file){
 				this.$store.dispatch('ChangeDisabled', 1)
 				this.$store.dispatch('TableTmp', 1)
+			},
+			onError(err, file) {
+				console.log('dfsjlkdslkfslfk')
 			},			
 			uploadSuccess(resp){
 				let pd = resp.exec
@@ -63,32 +67,44 @@
 				} else {
 					this.$message.error(resp.reason)
 				}
+				console.log(11111111111111111111111)
 				this.$store.dispatch('ChangeDisabled', -1)
 				this.$store.dispatch('TableTmp', -1)
 			},
 			fileRemove: function(file, fileList) {
-				console.log(file)
-				axios({
-					method: 'post',
-					url: '/api/backstage/delfile',
-					data: {file: file.name},
-					transformRequest:[
-						function(data) {
-							let params = ''
-							for(let index in data) {
-								params += index+'='+data[index]+'&'
-							}
-							return params
-						}
-					]
-				}).then(resp => {
-					// console.log(resp.data)
-					    console.log('1111111',fileList)
-						this.$store.dispatch('DelUploadFile', file.name)
-						this.fileChange();
+				// axios({
+				// 	method: 'post',
+				// 	url: '/api/backstage/delfile',
+				// 	data: {file: file.name},
+				// 	transformRequest:[
+				// 		function(data) {
+				// 			let params = ''
+				// 			for(let index in data) {
+				// 				params += index+'='+data[index]+'&'
+				// 			}
+				// 			return params
+				// 		}
+				// 	]
+				// }).then(resp => {
+				// 	// console.log(resp.data)
+				// 	    console.log('1111111',fileList)
+				// 		this.$store.dispatch('DelUploadFile', file.name)
+				// 		this.fileChange();
 						
-				}).catch(err => { console.log(err)
-				})
+				// }).catch(err => { console.log(err)
+				// })
+				this.$store.dispatch("DelFile", file).then(resp => {
+					let pd = resp.data.exec
+					if (pd === 'true') {
+						this.$message.success(resp.data.reason)
+
+					} else {
+						this.$message.error(resp.data.reason)
+						this.$store.dispatch('ChangeDisabled', -1)
+					}
+					this.$store.dispatch('DelUploadFile', file.name)
+					this.fileChange();
+				}).catch(err => {console.log(err)})
 			},
 			fileChange() {
 				// axios({
@@ -108,18 +124,20 @@
 			handleDel(index, row) {
 				// console.log(index, row)
 				// console.log(row.filename)
-				this.fileRemove({'name': row.name})
+				this.fileRemove(row)
 			},
 			handleDelSelection() {
+				console.log(this.multipleSelection)
 				for (let i in this.multipleSelection) {
-					this.fileRemove({'name': this.multipleSelection[i].filename})
+					this.fileRemove(this.multipleSelection[i])
 				}
 			},
 			handleSelectionChange(val) {
         		this.multipleSelection = val;
       		},
       		handleBack(row) {
-      			// console.log(row);
+      			console.log(row);
+      			console.log(this.multipleSelection)
     //   			axios({
 				// 	method: 'post',
 				// 	url: '/api/backstage/backupfile',
@@ -158,7 +176,7 @@
 				// 		this.open2()
 				// 	}
 				// }).catch(err=>{console.log(err)})
-				this.$store.dispatch('BackUpFile',filename).then(resp => {console.log(resp)}).catch(err => {console.log(err)})
+				this.$store.dispatch('BackUpFile',row).then(resp => {console.log(resp)}).catch(err => {console.log(err)})
 
 				// axios({
 				// 	method: 'get',

@@ -8,6 +8,7 @@ export function listFile(filename) {
 }
 
 export function backUpFile(filename) {
+	console.log('dfsasdfs',filename)
 	return request({
 		method: 'post',
 		url: '/backupfile',
@@ -17,8 +18,23 @@ export function backUpFile(filename) {
 			function(data) {
 				let params = ''
 				for(let index in data) {
-				  params += filename+'='+data[index].filename+'&'
+					params += 'filename=' + data[index].name + '&'
 				}
+				return params
+				}
+			]
+	})
+}
+
+export function delFile(filename) {
+	return request({
+		method: 'post',
+		url: '/delfile',
+		data: filename,
+		// emulateJSON: true,
+		transformRequest:[
+			function(data) {
+				let params = 'file='+data.name
 				return params
 				}
 			]
