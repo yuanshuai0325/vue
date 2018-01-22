@@ -28,7 +28,7 @@
 				<el-table-column label="操作">
 					<template slot-scope="scope">
 						<el-button size="mini" type="primary" :disabled="btndisabled" @click="handleBack([scope.row])">备份</el-button>
-						<el-button size="mini" type="warning" :disabled="btndisabled" @click="handleUpdate([{'filename': scope.row.name}])">更新</el-button>
+						<el-button size="mini" type="warning" :disabled="btndisabled" @click="handleUpdate([scope.row])">更新</el-button>
 						<el-button size="mini" type="danger" :disabled="btndisabled" @click="handleDel(scope.$index, scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
@@ -67,7 +67,6 @@
 				} else {
 					this.$message.error(resp.reason)
 				}
-				console.log(11111111111111111111111)
 				this.$store.dispatch('ChangeDisabled', -1)
 				this.$store.dispatch('TableTmp', -1)
 			},
@@ -136,8 +135,8 @@
         		this.multipleSelection = val;
       		},
       		handleBack(row) {
-      			console.log(row);
-      			console.log(this.multipleSelection)
+      			// console.log(row);
+      			// console.log(this.multipleSelection)
     //   			axios({
 				// 	method: 'post',
 				// 	url: '/api/backstage/backupfile',
@@ -176,7 +175,16 @@
 				// 		this.open2()
 				// 	}
 				// }).catch(err=>{console.log(err)})
-				this.$store.dispatch('BackUpFile',row).then(resp => {console.log(resp)}).catch(err => {console.log(err)})
+				this.$store.dispatch('BackUpFile',row).then(resp => {console.log(resp)
+					let successlist = resp.data.successlist
+					let faillist = resp.data.faillist
+					for (let index in successlist) {
+						this.$message.success("备份成功"+successlist[index])
+					}
+					for (let index in faillist) {
+						this.$message.error('请检查'+faillist[index]+'是否合规')
+					}
+					}).catch(err => {console.log(err)})
 
 				// axios({
 				// 	method: 'get',
@@ -193,42 +201,61 @@
       			// console.log(this.multipleSelection)
       		},
       		handleUpdate(row) {
-      			// console.log(this.loading)
-      			this.loading.pd = true;
-      			axios({
-					method: 'post',
-					url: '/api/backstage/updatefile',
-					data: row,
-					transformRequest:[
-						function(data) {
-							let params = ''
-							for(let index in data) {
-								params += 'filename=' + data[index].filename + '&'
-							}
-							return params
-						}
-					]
-				}).then(resp=>{
-					// console.log(resp.data.successdata)
-					// console.log(resp.data.faillist)
-					let pdata = '';
-					let data = resp.data.successdata;
-					for (let item1 in data) {
-						pdata += item1 + '<br>'
-						for (let item2 in data[item1]) {
-							for (let item3 in data[item1][item2])
-								pdata += item3 + ' : ' + data[item1][item2][item3]+ '<br>'
-						}
-					};
-					let fdata = resp.data.faillist;
-					for (let fitem in fdata) {
-							pdata += '<br>' + fdata[fitem] + '文件不符合要求<br>'
-					};
-					console.log(pdata)					
-	      			this.loading.pd = false;
-					this.$alert('<html>'+pdata+'</html>', {dangerouslyUseHTMLString: true, showClose: false})
+      			console.log(row)
+    //   			this.loading.pd = true;
+    //   			axios({
+				// 	method: 'post',
+				// 	url: '/api/backstage/updatefile',
+				// 	data: row,
+				// 	transformRequest:[
+				// 		function(data) {
+				// 			let params = ''
+				// 			for(let index in data) {
+				// 				params += 'filename=' + data[index].filename + '&'
+				// 			}
+				// 			return params
+				// 		}
+				// 	]
+				// }).then(resp=>{
+				// 	// console.log(resp.data.successdata)
+				// 	// console.log(resp.data.faillist)
+				// 	let pdata = '';
+				// 	let data = resp.data.successdata;
+				// 	for (let item1 in data) {
+				// 		pdata += item1 + '<br>'
+				// 		for (let item2 in data[item1]) {
+				// 			for (let item3 in data[item1][item2])
+				// 				pdata += item3 + ' : ' + data[item1][item2][item3]+ '<br>'
+				// 		}
+				// 	};
+				// 	let fdata = resp.data.faillist;
+				// 	for (let fitem in fdata) {
+				// 			pdata += '<br>' + fdata[fitem] + '文件不符合要求<br>'
+				// 	};
+				// 	console.log(pdata)					
+	   //    			this.loading.pd = false;
+				// 	this.$alert('<html>'+pdata+'</html>', {dangerouslyUseHTMLString: true, showClose: false})
 					
-				}).catch(err=>{console.log(err)})
+				// }).catch(err=>{console.log(err)})
+				this.$store.dispatch('ChangeLoading')
+				this.$store.dispatch('UpdateFile', row).then(resp => {console.log(resp)
+					let successlist = resp.data.successlist
+					let faillist = resp.data.faillist
+					let message = ''
+					this.$store.dispatch('ChangeLoading')
+					for (let project in successlist) {
+						message += '<br><strong><i>'+project+':</i></strong>'
+						for (let item in successlist[project]) {
+							for (let host in successlist[project][item]) {
+								message += '<br>'+ host +':<br>' + '&nbsp;&nbsp;&nbsp;&nbsp;'+ successlist[project][item][host]+'<br>'
+							}
+						}
+					}
+					for (let index in faillist) {
+						message += '<br>' + faillist[index] + '文件不符合要求<br>'
+					}
+					this.$alert(message, '执行结果', {dangerouslyUseHTMLString: true, showClose:false})
+					}).catch(err => {console.log(err)})
       		},
       		handleUpdateSelection() {
       			this.handleUpdate(this.multipleSelection)

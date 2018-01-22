@@ -1,5 +1,6 @@
 <template>
-	<div class="mcontainer" v-loading="loading.pd" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
+	<!-- <div class="mcontainer" v-loading="loading.pd" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)"> -->
+	<div class="mcontainer" v-loading="storeloading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
 		<header-bar></header-bar>
 		<side-bar></side-bar>
 		<div class="mcontainerbox">
@@ -16,6 +17,11 @@
 		data(){
 			return {
 				loading: {'pd': false},
+			}
+		},
+		computed: {
+			storeloading() {
+				return this.$store.getters.loading
 			}
 		},
 		components: {

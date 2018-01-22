@@ -40,3 +40,23 @@ export function delFile(filename) {
 			]
 	})
 }
+
+export function updateFile(data) {
+			console.log(data)
+
+	return request({
+		method: 'post',
+		url: 'updatefile',
+		data: data,
+		transformRequest:[
+			function(data) {
+				let params = ''
+				for(let index in data) {
+					console.log(index,data[index])
+					params += 'filename=' + data[index].name + '&'
+				}
+				return params
+			}
+		]
+	})
+}

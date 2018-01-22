@@ -25,15 +25,27 @@
 				</el-table-column>
 			</el-table>
 		</div>
-		<div id="rcdisplay" v-show="cardshow">
+		<!-- <div id="rcdisplay" v-show="cardshow">
 			<el-card class="box-card">
   				<div slot="header" class="clearfix">
-    				<span>卡片名称</span>
+    				<span>{{cmdreturn.host}}:</span>
 			  	</div>
-  				<div class="text item">
-    				{{cmdreturn}}
-  				</div>
+  				<div class="text item" style="padding: 20px;">
+    				{{cmdreturn.data}}
+    			</div>
 			</el-card>
+		</div> -->
+		<div id="rcdisplay" v-show="cardshow">
+			<br>
+			<el-row>
+				<el-col :span="23" :offset="1">{{cmdreturn.host}}:</el-col>
+			</el-row>
+			<hr style="border:0;background-color:#ebebeb;height:1px;">
+			<br>
+			<el-row>
+				<el-col :span="22" :offset="2" v-for="(item,index) in cmdreturn.data" :key="index">{{item}}</el-col>
+			</el-row>
+			<br>
 		</div>
 	</div>
 </template>
@@ -140,5 +152,10 @@
 		right: 2%;
 		width: 60%;
 		margin-top: 6%;
+		border:1px solid #ebebeb;
+		transition: .2s;
+	}
+	#rcdisplay:hover {
+		box-shadow:0 0 8px 0 rgba(232,237,250,.6),0 2px 4px 0 rgba(232,237,250,.5);
 	}
 </style>
