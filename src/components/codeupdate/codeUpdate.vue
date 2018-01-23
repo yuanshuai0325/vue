@@ -255,7 +255,10 @@
 						message += '<br>' + faillist[index] + '文件不符合要求<br>'
 					}
 					this.$alert(message, '执行结果', {dangerouslyUseHTMLString: true, showClose:false})
-					}).catch(err => {console.log(err)})
+					}).catch(err => {console.log(err)
+						this.$store.dispatch('ChangeLoading')
+						this.$alert('执行出错'+err, '执行结果', {dangerouslyUseHTMLString: true, showClose:false})
+					})
       		},
       		handleUpdateSelection() {
       			this.handleUpdate(this.multipleSelection)
