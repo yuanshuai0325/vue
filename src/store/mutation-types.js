@@ -15,6 +15,8 @@ export const SET_DELROUTERS = 'SET_DELROUTERS'
 //allusersetting
 //获取所有用户
 export const SET_GETALLUSER = 'SET_GETALLUSER'
+//项目信息
+export const SET_ALL_MESSAGE = 'SET_ALL_MESSAGE'
 
 //cmdrun
 //获取repodir

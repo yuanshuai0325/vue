@@ -95,5 +95,6 @@
     /*border: 1px solid red;*/
     height: 80%;
     width: 10%;
+    min-width: 200px;
   }
 </style>

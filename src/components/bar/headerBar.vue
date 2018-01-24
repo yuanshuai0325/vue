@@ -86,7 +86,7 @@
 
 <style scoped>
   .mheader {
-    padding-left:5%;
+    padding-left:7%;
     margin-bottom: 2%;
   }
   .mname {

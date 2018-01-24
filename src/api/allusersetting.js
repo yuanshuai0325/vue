@@ -80,3 +80,10 @@ export function changeUserPassword(formData) {
 			]
 	})
 }
+
+export function getAllMessage() {
+	return request({
+		method: 'post',
+		url: '/getall',
+	})
+}

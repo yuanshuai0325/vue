@@ -1,14 +1,18 @@
-import {addNewUser, getAllUser, changeUserCode, delUser, changeUserPassword} from '@/api/allusersetting'
+import {addNewUser, getAllUser, changeUserCode, delUser, changeUserPassword, getAllMessage} from '@/api/allusersetting'
 
 import * as types from '../mutation-types.js'
 
 const allusersetting = {
 	state: {
 		getalluser: [],
+		getallmessage: {},
 	},
 	getters: {
 		getalluser(state) {
 			return state.getalluser
+		},
+		getallmessage(state) {
+			return state.getallmessage
 		}
 	},
 	mutations: {
@@ -16,6 +20,9 @@ const allusersetting = {
 			console.log('allusersetting 更新mutation')
 			state.getalluser = getalluser
 			console.log(state.getalluser)
+		},
+		[types.SET_ALL_MESSAGE](state, allmessage){
+			state.getallmessage = allmessage
 		}
 	},
 	actions: {
@@ -66,6 +73,21 @@ const allusersetting = {
 			return new Promise((resolve, reject) => {
 				changeUserPassword(password).then(resp => {
 					resolve(resp)
+				}).catch(err => {
+					reject(err)
+				})
+			})
+		},
+		GetAllMessage({commit}){
+			return new Promise((resolve, reject) => {
+				getAllMessage().then(resp => {
+					let pd = resp.data.exec
+					if ( pd === 'true' ) {
+						commit(types.SET_ALL_MESSAGE, resp.data.repo)
+						resolve('allmessage 更新成功')
+					} else {
+						reject(resp.data.reason)
+					}
 				}).catch(err => {
 					reject(err)
 				})
