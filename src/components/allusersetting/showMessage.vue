@@ -1,13 +1,33 @@
 <template>
 	<div>
+		<br><br><br><br>
 		<el-carousel :interval="3000" type="card">
 			<el-carousel-item v-for="(value, key, index) in getallmessage" :key="index">
-				<h4>{{key}}</h4>
-				<h4>{{value.projects}}</h4>
-				<h4>{{value.hosts}}</h4>
+				<br><br><br><br>
+				<el-row>
+					<el-col :span="6" :offset="8">repo 名：</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="12" :offset="12">{{key}}</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="6" :offset="8">应用名：</el-col>
+				</el-row>
+				<el-row v-for="(project,index) in value.projects" :key="index">
+					<el-col :span="12" :offset="12">{{project}}</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="6" :offset="8">主机名：</el-col>
+				</el-row>
+				<el-row v-for="(host,index) in value.hosts" :key="index">
+					<el-col :span="12" :offset="12">{{host}}</el-col>
+				</el-row>
 			</el-carousel-item>
 		</el-carousel>
-		<h3>{{getallmessage}}</h3>
+		<br>
+		<el-row>
+			<el-col :span="6" :offset="11"><h2>目前在用项目统计</h2></el-col>
+		</el-row>
 	</div>
 </template>
 
