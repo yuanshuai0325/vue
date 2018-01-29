@@ -17,6 +17,8 @@ export const SET_DELROUTERS = 'SET_DELROUTERS'
 export const SET_GETALLUSER = 'SET_GETALLUSER'
 //项目信息
 export const SET_ALL_MESSAGE = 'SET_ALL_MESSAGE'
+//存储repo值
+export const SET_REPO = 'SET_REPO'
 
 //cmdrun
 //获取repodir

@@ -47,9 +47,9 @@
 				</el-row>
 		</div>
 		<div id="addcontainer" v-show="add">
-			<keep-alive>
+			<!-- <keep-alive> -->
 				<component v-bind:is="currentView"></component>
-			</keep-alive>
+			<!-- </keep-alive> -->
 		</div>
 	</div>
 </template>
@@ -65,7 +65,6 @@
 				add: false,
 				hosts: [],
 				projects: [],
-				repo: '',
 				currentView: 'addHost',
 			}
 		},
@@ -76,7 +75,7 @@
 		},
 		methods: {
 			show(key) {
-				this.repo = key
+				this.$store.dispatch("SetRepo", key)
 				this.hosts = this.getallmessage[key].hosts
 				this.projects = this.getallmessage[key].projects
 				this.detail = true
@@ -100,6 +99,8 @@
 				console.log(repo)
 				this.add = true
 				this.currentView = "addHost"
+				this.hosts = this.getallmessage[repo].hosts
+				this.projects = this.getallmessage[repo].projects
 			},
 			removehost(repo,host) {
 				console.log(repo,host)
@@ -108,6 +109,9 @@
 		computed: {
 			getallmessage() {
 				return this.$store.getters.getallmessage
+			},
+			repo() {
+				return this.$store.getters.repo
 			}
 		},
 	}

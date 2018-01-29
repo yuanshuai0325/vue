@@ -87,3 +87,16 @@ export function getAllMessage() {
 		url: '/getall',
 	})
 }
+
+export function addNewHost(host,repo) {
+	return request({
+		method: 'post',
+		url:"/addnewhost",
+		data: host,
+		transformRequest: [
+			function(data) {
+				return 'host=' + data + '&repo=' + repo
+			}
+		]
+	})
+}

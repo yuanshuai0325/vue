@@ -1,4 +1,4 @@
-import {addNewUser, getAllUser, changeUserCode, delUser, changeUserPassword, getAllMessage} from '@/api/allusersetting'
+import {addNewUser, getAllUser, changeUserCode, delUser, changeUserPassword, getAllMessage, addNewHost} from '@/api/allusersetting'
 
 import * as types from '../mutation-types.js'
 
@@ -6,6 +6,7 @@ const allusersetting = {
 	state: {
 		getalluser: [],
 		getallmessage: {},
+		repo: '',
 	},
 	getters: {
 		getalluser(state) {
@@ -13,6 +14,9 @@ const allusersetting = {
 		},
 		getallmessage(state) {
 			return state.getallmessage
+		},
+		repo(state) {
+			return state.repo
 		}
 	},
 	mutations: {
@@ -23,6 +27,10 @@ const allusersetting = {
 		},
 		[types.SET_ALL_MESSAGE](state, allmessage){
 			state.getallmessage = allmessage
+		},
+		[types.SET_REPO](state, repo){
+			state.repo = repo
+			console.log('repo 已获得，', state.repo)
 		}
 	},
 	actions: {
@@ -88,6 +96,22 @@ const allusersetting = {
 					} else {
 						reject(resp.data.reason)
 					}
+				}).catch(err => {
+					reject(err)
+				})
+			})
+		},
+		SetRepo({commit},repo){
+			commit(types.SET_REPO, repo)
+		},
+		AddNewHost({commit,state}, host) {
+			return new Promise((resolve, reject) => {
+				addNewHost(host,state.repo).then(resp => {
+					let pd = resp.data.exec
+					if (pd === "true") {
+						this.dispatch("GetAllMessage").then(resp => {console.log(resp)}).catch(err => {console.log(err)})
+					}
+					resolve(resp)
 				}).catch(err => {
 					reject(err)
 				})
