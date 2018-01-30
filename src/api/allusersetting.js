@@ -100,3 +100,29 @@ export function addNewHost(host,repo) {
 		]
 	})
 }
+
+export function delHost(host,repo) {
+	return request({
+		method: 'post',
+		url:"/delhost",
+		data: host,
+		transformRequest: [
+			function(data) {
+				return 'host=' + data + '&repo=' + repo
+			}
+		]
+	})
+}
+
+export function addProject(project,repo) {
+	return request({
+		method: 'post',
+		url:"/addproject",
+		data: project,
+		transformRequest: [
+			function(data) {
+				return 'project=' + data + '&repo=' + repo
+			}
+		]
+	})
+}

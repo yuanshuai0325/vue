@@ -20,7 +20,7 @@
 					</el-col>
 					<el-col :span="2">
 						<el-tooltip class="item" effect="light" content="移除" placement="right" > 
-							<i class="el-icon-remove-outline" style="color:red;" @click="removeproject(repo,project)"></i>
+							<i class="el-icon-remove-outline" style="color:red;" @click="removeproject(project)"></i>
 						</el-tooltip>
 					</el-col>
 				</el-row>
@@ -41,7 +41,7 @@
 					</el-col>
 					<el-col :span="2">
 						<el-tooltip class="item" effect="light" content="移除" placement="right"> 
-							<i class="el-icon-remove-outline" style="color:red;" @click="removehost(repo,host)"></i>
+							<i class="el-icon-remove-outline" style="color:red;" @click="removehost(host)"></i>
 						</el-tooltip>
 					</el-col>
 				</el-row>
@@ -63,8 +63,8 @@
 			return {
 				detail: false,
 				add: false,
-				hosts: [],
-				projects: [],
+				// hosts: [],
+				// projects: [],
 				currentView: 'addHost',
 			}
 		},
@@ -76,8 +76,10 @@
 		methods: {
 			show(key) {
 				this.$store.dispatch("SetRepo", key)
-				this.hosts = this.getallmessage[key].hosts
-				this.projects = this.getallmessage[key].projects
+				// this.hosts = this.getallmessage[key].hosts
+				// this.projects = this.getallmessage[key].projects
+				this.$store.dispatch("SetProjects", this.getallmessage[key].projects)
+				this.$store.dispatch("SetHosts", this.getallmessage[key].hosts)
 				this.detail = true
 				this.add = false
 			},
@@ -99,11 +101,20 @@
 				console.log(repo)
 				this.add = true
 				this.currentView = "addHost"
-				this.hosts = this.getallmessage[repo].hosts
-				this.projects = this.getallmessage[repo].projects
 			},
-			removehost(repo,host) {
-				console.log(repo,host)
+			removehost(host) {
+				this.$store.dispatch("DelHost",host).then(resp => {
+					console.log(resp)
+					let pd = resp.data.exec
+					if (pd === 'true') {
+						this.$message.success(resp.data.reason)
+					} else {
+						this.$message.error(resp.data.reason)
+					}
+				}).catch(err => {
+					console.log(err)
+					this.$message.error(resp.data.reason)
+				})
 			},
 		},
 		computed: {
@@ -112,6 +123,12 @@
 			},
 			repo() {
 				return this.$store.getters.repo
+			},
+			projects() {
+				return this.$store.getters.projects
+			},
+			hosts() {
+				return this.$store.getters.hosts
 			}
 		},
 	}

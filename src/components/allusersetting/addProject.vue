@@ -26,7 +26,20 @@
 				console.log(value)
 			},
 			addproject() {
-				
+				if (this.value) {
+					this.$store.dispatch('AddProject', this.value).then(resp => {
+						console.log(resp)
+						let pd = resp.data.exec
+						if (pd === 'true') {
+							this.$message.success(resp.data.reason)
+						} else {
+							this.$message.error(resp.data.reason)
+						}
+					}).catch(err => {console.log(err)})
+				} else {
+					this.$message.error("请选择添加的应用")
+				}
+				this.value = ''
 			}
 		},
 		computed: {
