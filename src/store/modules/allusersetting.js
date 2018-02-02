@@ -1,4 +1,4 @@
-import {addNewUser, getAllUser, changeUserCode, delUser, changeUserPassword, getAllMessage, addNewHost, delHost, addProject} from '@/api/allusersetting'
+import {addNewUser, getAllUser, changeUserCode, delUser, changeUserPassword, getAllMessage, addNewHost, delHost, addProject, delProject, addRepo} from '@/api/allusersetting'
 
 import * as types from '../mutation-types.js'
 
@@ -167,6 +167,35 @@ const allusersetting = {
 							console.log(resp)
 							this.dispatch("SetProjects", state.getallmessage[state.repo].projects)
 						}).catch(err => {console.log(err)})
+					}
+					resolve(resp)
+				}).catch(err => {
+					reject(err)
+				})
+			})
+		},
+		DelProject({commit,state}, project) {
+			return new Promise((resolve,reject) => {
+				delProject(project,state.repo).then(resp => {
+					let pd = resp.data.exec
+					if (pd === 'true') {
+						this.dispatch("GetAllMessage").then(resp => {
+							console.log(resp)
+							this.dispatch("SetProjects", state.getallmessage[state.repo].projects)
+						}).catch(err => {console.log(err)})
+					}
+					resolve(resp)
+				}).catch(err => {
+					reject(err)
+				})
+			})
+		},
+		AddRepo({commit}, repo,lpath,rpath) {
+			return new Promise((resolve,reject) => {
+				addRepo(repo,lpath,rpath).then(resp => {
+					let pd = resp.data.exec
+					if (pd === 'true') {
+						this.dispatch("GetAllMessage").then(resp => {console.log(resp)}).catch(err => {console.log(err)})
 					}
 					resolve(resp)
 				}).catch(err => {

@@ -4,7 +4,9 @@
 		<el-tooltip class="item" effect="light" content="添加repo" placement="right" > 
 			<i class="el-icon-circle-plus-outline" style="color:green;" @click="addrepo"></i>
 		</el-tooltip>
-
+		<el-tooltip class="item" effect="light" content="移除" placement="right" > 
+			<i class="el-icon-remove-outline" style="color:red;" @click="removerepo()"></i>
+		</el-tooltip>
 		<div id="showdetail" v-show="detail">
 				<el-row>
 					<el-col :span="22">应用</el-col>
@@ -56,6 +58,7 @@
 
 <script>
 	import addRepo from './addRepo.vue'
+	import delRepo from './delRepo.vue'
 	import addHost from './addHost.vue'
 	import addProject from './addProject.vue'
 	export default {
@@ -70,6 +73,7 @@
 		},
 		components: {
 			addRepo,
+			delRepo,
 			addHost,
 			addProject,
 		},
@@ -89,13 +93,31 @@
 				this.add = true
 				this.currentView = "addRepo"
 			},
+			removerepo() {
+				console.log(11111111111111)
+				this.detail = false
+				this.add = true
+				this.currentView = "delRepo"
+			},
 			addproject(repo) {
 				console.log(repo)
 				this.add = true
 				this.currentView = "addProject"
 			},
-			removeproject(repo, project) {
-				console.log(repo, project)
+			removeproject(project) {
+				console.log(project)
+				this.$store.dispatch("DelProject", project).then(resp => {
+					console.log(resp)
+					let pd = resp.data.exec
+					if (pd === 'true') {
+						this.$message.success(resp.data.reason)
+					} else {
+						this.$message.error(resp.data.reason)
+					}
+				}).catch(err => {
+					console.log(err)
+					this.$message.error(resp.data.reason)
+				})
 			},
 			addhost(repo) {
 				console.log(repo)

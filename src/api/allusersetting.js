@@ -126,3 +126,33 @@ export function addProject(project,repo) {
 		]
 	})
 }
+
+export function delProject(project,repo) {
+	return request({
+		method: 'post',
+		url:"/delproject",
+		data: project,
+		transformRequest: [
+			function(data) {
+				return 'project=' + data + '&repo=' + repo
+			}
+		]
+	})
+}
+
+export function addRepo(data) {
+	return request({
+		method: 'post',
+		url:"/addrepo",
+		data: data,
+		transformRequest: [
+			function(data) {
+				let params = ''
+				for(let index in data) {
+				  params += index+'='+data[index]+'&'
+				}
+				return params
+			}
+		]
+	})
+}
