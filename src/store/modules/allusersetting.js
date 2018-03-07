@@ -1,4 +1,4 @@
-import {addNewUser, getAllUser, changeUserCode, delUser, changeUserPassword, getAllMessage, addNewHost, delHost, addProject, delProject, addRepo} from '@/api/allusersetting'
+import {addNewUser, getAllUser, changeUserCode, delUser, changeUserPassword, getAllMessage, addNewHost, delHost, addProject, delProject, addRepo, delRepo} from '@/api/allusersetting'
 
 import * as types from '../mutation-types.js'
 
@@ -202,7 +202,17 @@ const allusersetting = {
 					reject(err)
 				})
 			})
-		}
+		},
+		DelRepo({commit}, repo) {
+			return new Promise((resolve,reject) => {
+				delRepo(repo).then(resp => {
+					resolve(resp)
+					this.dispatch("GetAllMessage").then(resp => {console.log(resp)}).catch(err => {console.log(err)})
+				}).catch(err => {
+					reject(err)
+				})
+			})	
+		},
 	}
 }
 

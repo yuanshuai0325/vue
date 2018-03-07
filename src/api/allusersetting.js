@@ -156,3 +156,16 @@ export function addRepo(data) {
 		]
 	})
 }
+
+export function delRepo(repo) {
+	return request({
+		method: 'post',
+		url: '/delrepo',
+		data: repo,
+		transformRequest: [
+			function(data) {
+				return 'repo=' + repo
+			}
+		]
+	})
+}
