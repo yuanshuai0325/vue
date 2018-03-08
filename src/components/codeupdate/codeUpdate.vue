@@ -1,4 +1,5 @@
 <template>
+	<!-- 生产环境中使用 action="http://upserver/api/backstage/postfile/" -->
 	<div class="mshow">
 		<el-upload
 			class="upload-demo"
@@ -9,6 +10,7 @@
 			:on-remove="fileRemove"
 			:file-list="filelist"
 			action="http://localhost:8080/api/backstage/postfile/"
+			
 			multiple>
 			<i class="el-icon-upload"></i>
 			<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
